@@ -116,6 +116,12 @@ public class CardManager : MonoBehaviour
         selectedCardObject = _cardGameObject;
     }
 
+    public void DeselectCardForPlay()
+    {
+        selectedCard = null;
+        selectedCardObject = null;
+    }
+
     public bool PlayCard(int _lane)
     {
         if(selectedCard == null)
@@ -149,8 +155,17 @@ public class CardManager : MonoBehaviour
             
             return true;
         }
-        
+        else if(selectedCard.Type == CardType.Structure)
+        {
+            selectedCard.Behaviour.Initialize(_lane, 0);
+            RemoveCard(true, selectedCard);
 
+            selectedCard = null;
+            selectedCardObject = null;
+            
+            return true;
+        }
+        
         // If the lane is occupied, return false to notify
         return false;
     }

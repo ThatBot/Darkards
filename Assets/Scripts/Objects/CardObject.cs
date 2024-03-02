@@ -21,5 +21,6 @@ public class CardObject : ScriptableObject
 public enum CardType
 {
     Creature = 0,
-    Spell
+    Spell,
+    Structure
 }

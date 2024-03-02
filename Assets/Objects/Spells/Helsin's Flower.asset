@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a10346d4d4c1b941b101c2eead84c34, type: 3}
+  m_Name: Helsin's Flower
+  m_EditorClassIdentifier: 
+  CardName: Helsin's Flower
+  Sprite: {fileID: 0}
+  Hologram: {fileID: 0}
+  Type: 1
+  Behaviour: {fileID: 2907570693278428711, guid: 88c1fec5ef7ad29499782d4bee181447,
+    type: 3}
+  Cost: 0
+  Health: 0
+  Damage: 0

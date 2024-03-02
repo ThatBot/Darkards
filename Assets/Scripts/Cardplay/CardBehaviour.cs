@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardBehaviour
+public class CardBehaviour : MonoBehaviour
 {
     private int lane;
     private int row;
@@ -17,7 +17,7 @@ public class CardBehaviour
 
     public virtual void OnCastEffect()
     {
-        
+
     }
 
     public virtual void OnTurnEffect()

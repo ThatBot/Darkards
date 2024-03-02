@@ -9,6 +9,7 @@ public class CardInstance : MonoBehaviour
     [SerializeField] private float pointerOffset = 50.0f;
     [HideInInspector] public CardObject Card;
     private Outline outline;
+    private bool selected;
 
     public void Start()
     {
@@ -33,16 +34,21 @@ public class CardInstance : MonoBehaviour
 
     public void OnPointerClick()
     {
-        SelectCard();
+        if(selected) DeselectCard();
+        else SelectCard();
     }
 
     public void SelectCard()
     {
         outline.enabled = true;
+        selected = true;
+        CardManager.Instance.SelectCardForPlay(Card, gameObject);
     }
 
     public void DeselectCard()
     {
         outline.enabled = false;
+        selected = false;
+        CardManager.Instance.DeselectCardForPlay();
     }
 }
