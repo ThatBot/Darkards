@@ -6,8 +6,6 @@ using TMPro;
 
 public class CardRenderer : MonoBehaviour
 {
-    public CardObject Card;
-
     [Header("References")]
     [SerializeField] private Image background;
     [SerializeField] private Image image;
@@ -15,17 +13,11 @@ public class CardRenderer : MonoBehaviour
     [SerializeField] private TMP_Text damageText;
     [SerializeField] private TMP_Text healthText;
 
-    void Start()
+    public void Initialize(CardObject _card)
     {
-        image.sprite = Card.Sprite;
-        nameText.text = Card.CardName;
-        damageText.text = Card.Damage.ToString();
-        healthText.text = Card.Health.ToString();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        image.sprite = _card.Sprite;
+        //nameText.text = _card.CardName;
+        //damageText.text = _card.Damage.ToString();
+        //healthText.text = _card.Health.ToString();
     }
 }

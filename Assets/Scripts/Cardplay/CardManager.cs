@@ -25,7 +25,7 @@ public class CardManager : MonoBehaviour
     [SerializeField] private int deckCapacity = 10;
 
     [Header("Player Data")]
-    public List<CardObject> PlayerHand = new List<CardObject>();
+    public List<GameObject> PlayerHand = new List<GameObject>();
     public List<CardObject> PlayerDeck = new List<CardObject>();
     public CardObject[] PlayerLanes = new CardObject[3];
 
@@ -34,21 +34,39 @@ public class CardManager : MonoBehaviour
     public List<CardObject> RivalDeck = new List<CardObject>();
     public CardObject[] RivalLanes = new CardObject[3];
 
+    [Header("Scene References")]
+    [SerializeField] private Transform playerHandTransform;
+    [SerializeField] private GameObject cardPrefab;
+
+    private CardObject selectedCard;
+    private GameObject selectedCardObject;
+
     public bool DrawCard(bool _player)
     {
         if (_player && PlayerHand.Count <= handCapacity)
         {
-            int rand = Random.Range(0, PlayerDeck.Count - 1);
-            PlayerHand.Add(PlayerDeck[rand]);
-            PlayerDeck.RemoveAt(rand);
+            // Select a card to draw
+            int _rand = Random.Range(0, PlayerDeck.Count - 1);
+
+            // Create the object for the user to interact with
+            GameObject _cardObject = Instantiate(cardPrefab, playerHandTransform);
+            _cardObject.GetComponentInChildren<CardInstance>().AssignCard(PlayerDeck[_rand]);
+
+            PlayerHand.Add(_cardObject);
+
+            // Remove card from deck
+            PlayerDeck.RemoveAt(_rand);
 
             return true;
         }
         else if(RivalHand.Count <= handCapacity)
         {
-            int rand = Random.Range(0, RivalDeck.Count - 1);
-            RivalHand.Add(RivalDeck[rand]);
-            RivalDeck.RemoveAt(rand);
+            // Select a card to draw
+            int _rand = Random.Range(0, RivalDeck.Count - 1);
+            RivalHand.Add(RivalDeck[_rand]);
+
+            // Remove card from deck
+            RivalDeck.RemoveAt(_rand);
 
             return true;
         }
@@ -57,14 +75,81 @@ public class CardManager : MonoBehaviour
         return false;
     }
 
-    public bool PlayCard(CardObject _card, int _lane)
+    public bool RemoveCard(bool _player, CardObject _card)
     {
-        if(PlayerLanes[_lane] == null)
+        if(_player)
         {
-            PlayerLanes[_lane] = _card;
-            PlayerHand.Remove(_card);
+            for (int i = 0; i < PlayerHand.Count; i++)
+            {
+                if(PlayerHand[i].GetComponentInChildren<CardInstance>().Card == _card)
+                {
+                    Destroy(PlayerHand[i]);
+                    PlayerHand.RemoveAt(i);
+
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < RivalHand.Count; i++)
+            {
+                if(RivalHand[i] == _card)
+                {
+                    RivalHand.RemoveAt(i);
+
+                    return true;
+                }
+            }
+        }
+
+        // If the card was not present on the hand, return false to notify
+        return false;
+    }
+
+    public void SelectCardForPlay(CardObject _card, GameObject _cardGameObject)
+    {
+        // If there is a card selected, deselect it
+        if(selectedCard != null) selectedCardObject.GetComponent<CardInstance>().DeselectCard();
+
+        selectedCard = _card;
+        selectedCardObject = _cardGameObject;
+    }
+
+    public bool PlayCard(int _lane)
+    {
+        if(selectedCard == null)
+        {
+            return false;
+        }
+
+        if(selectedCard.Type == CardType.Creature)
+        {
+            if(PlayerLanes[_lane] == null)
+            {
+                PlayerLanes[_lane] = selectedCard;
+
+                selectedCard.Behaviour?.Initialize(_lane, 0);
+
+                RemoveCard(true, selectedCard);
+
+                selectedCard = null;
+                selectedCardObject = null;
+
+                return true;
+            }
+        }
+        else if(selectedCard.Type == CardType.Spell)
+        {
+            selectedCard.Behaviour.Initialize(_lane, 0);
+            RemoveCard(true, selectedCard);
+
+            selectedCard = null;
+            selectedCardObject = null;
+            
             return true;
         }
+        
 
         // If the lane is occupied, return false to notify
         return false;

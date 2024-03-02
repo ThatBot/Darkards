@@ -12,6 +12,7 @@ public class CardObject : ScriptableObject
 
     [Header("Mechanics")]
     public CardType Type;
+    public CardBehaviour Behaviour;
     public int Cost;
     public int Health;
     public int Damage;
