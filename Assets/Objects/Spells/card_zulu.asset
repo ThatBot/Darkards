@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a10346d4d4c1b941b101c2eead84c34, type: 3}
-  m_Name: Helsin's Flower
+  m_Name: card_zulu
   m_EditorClassIdentifier: 
-  CardName: Helsin's Flower
-  Sprite: {fileID: 0}
+  CardName: Zulu, Dios de la Muerte
+  Sprite: {fileID: 21300000, guid: 5b2de5265ac8a6d43a1b000a6e2ab677, type: 3}
   Hologram: {fileID: 0}
   Type: 1
-  Behaviour: {fileID: 2907570693278428711, guid: 88c1fec5ef7ad29499782d4bee181447,
+  Behaviour: {fileID: 6881291021448117676, guid: eccc65aae65a11545819688456429523,
     type: 3}
   Cost: 0
   Health: 0
+  MaxHealth: 0
   Damage: 0

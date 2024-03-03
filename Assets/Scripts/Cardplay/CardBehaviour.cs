@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CardBehaviour : MonoBehaviour
 {
-    private int lane;
-    private int row;
+    protected int lane;
+    protected int row;
 
     public virtual void Initialize(int _lane, int _row)
     {

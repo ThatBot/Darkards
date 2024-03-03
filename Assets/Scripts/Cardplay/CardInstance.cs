@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class CardInstance : MonoBehaviour
 {
     [SerializeField] private float pointerOffset = 50.0f;
-    [HideInInspector] public CardObject Card;
+    public CardObject Card;
     private Outline outline;
     private bool selected;
 

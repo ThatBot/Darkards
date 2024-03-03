@@ -15,6 +15,7 @@ public class CardObject : ScriptableObject
     public CardBehaviour Behaviour;
     public int Cost;
     public int Health;
+    public int MaxHealth;
     public int Damage;
 }
 

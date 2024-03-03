@@ -10,12 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3a10346d4d4c1b941b101c2eead84c34, type: 3}
-  m_Name: Minotaur
+  m_Name: card_fortress
   m_EditorClassIdentifier: 
-  CardName: Minotaur
-  Sprite: {fileID: 0}
-  Hologram: {fileID: 919132149155446097, guid: 01fb8ad45ebe01348918694498b0c0cb, type: 3}
-  Type: 0
+  CardName: Asedio de Mythril
+  Sprite: {fileID: 21300000, guid: 8675fe0dd65ef634abef2f29f1a64030, type: 3}
+  Hologram: {fileID: 919132149155446097, guid: 09211689bd907e64d9af685f55dc91ef, type: 3}
+  Type: 2
+  Behaviour: {fileID: 4148047626461203796, guid: 630bb5f0309829142ae640f41e9867ad,
+    type: 3}
   Cost: 0
-  Health: 0
+  Health: 15
+  MaxHealth: 15
   Damage: 0

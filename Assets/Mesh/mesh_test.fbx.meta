@@ -1,39 +1,9 @@
 fileFormatVersion: 2
-guid: a43c081fb6746cc4dbbf63ca5a80d90b
+guid: 09211689bd907e64d9af685f55dc91ef
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: carpa
-    second: {fileID: 2100000, guid: 3cd9a180bf6a3074f89df9b351b254eb, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: craneo
-    second: {fileID: 2100000, guid: dee1f02d2965c2348824bdfe9ace3c10, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: frasco corazon
-    second: {fileID: 2100000, guid: 1fb5ed23d2a849f4b9d2869b3ad87939, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: hechizos
-    second: {fileID: 2100000, guid: 1fb5ed23d2a849f4b9d2869b3ad87939, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: mesa
-    second: {fileID: 2100000, guid: f21f5c0b2e9441c42b3bfb8031921549, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: portacartas
-    second: {fileID: 2100000, guid: 1f7ad0d8ff6191e44903a9955cf1b81f, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -65,7 +35,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0.1
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -108,7 +78,7 @@ ModelImporter:
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 0
+  importAnimation: 1
   humanDescription:
     serializedVersion: 3
     human: []
@@ -120,7 +90,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1
+    globalScale: 0.001
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

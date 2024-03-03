@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardManager : MonoBehaviour
 {
@@ -27,16 +28,32 @@ public class CardManager : MonoBehaviour
     [Header("Player Data")]
     public List<GameObject> PlayerHand = new List<GameObject>();
     public List<CardObject> PlayerDeck = new List<CardObject>();
-    public CardObject[] PlayerLanes = new CardObject[3];
+    public CardObject[] PlayerCreatureLanes = new CardObject[3];
+    public CardObject[] PlayerStructureLanes = new CardObject[3];
 
     [Header("Rival Data")]
     public List<CardObject> RivalHand = new List<CardObject>();
     public List<CardObject> RivalDeck = new List<CardObject>();
-    public CardObject[] RivalLanes = new CardObject[3];
+    public CardObject[] RivalCreatureLanes = new CardObject[3];
+    public CardObject[] RivalStructureLanes = new CardObject[3];
 
     [Header("Scene References")]
     [SerializeField] private Transform playerHandTransform;
     [SerializeField] private GameObject cardPrefab;
+
+    [SerializeField] private Image[] cardHolderCards;
+
+    [SerializeField] private List<Transform> playerLaneHologramMarkers = new List<Transform>();
+    [SerializeField] private List<Transform> rivalLaneHologramMarkers = new List<Transform>();
+
+    private GameObject[] playerLaneHologramObjects = new GameObject[3];
+    private GameObject[] rivalLaneHologramObjects = new GameObject[3];
+
+    [SerializeField] private List<Transform> playerStructureLaneHologramMarkers = new List<Transform>();
+    [SerializeField] private List<Transform> rivalStructureLaneHologramMarkers = new List<Transform>();
+
+    private GameObject[] playerStructureLaneHologramObjects = new GameObject[3];
+    private GameObject[] rivalStructureLaneHologramObjects = new GameObject[3];
 
     private CardObject selectedCard;
     private GameObject selectedCardObject;
@@ -75,6 +92,18 @@ public class CardManager : MonoBehaviour
         return false;
     }
 
+    #region Deck Management
+    public bool AddCardToDeck(bool _player, CardObject _card)
+    {
+        if(_player && PlayerDeck.Count >= deckCapacity) return false;
+        else if(!_player && RivalDeck.Count >= deckCapacity) return false;
+
+        if(_player) PlayerDeck.Add(_card);
+        else RivalDeck.Add(_card);
+
+        return true;
+    }
+
     public bool RemoveCard(bool _player, CardObject _card)
     {
         if(_player)
@@ -107,6 +136,9 @@ public class CardManager : MonoBehaviour
         return false;
     }
 
+    #endregion
+
+    #region Card Play
     public void SelectCardForPlay(CardObject _card, GameObject _cardGameObject)
     {
         // If there is a card selected, deselect it
@@ -129,25 +161,36 @@ public class CardManager : MonoBehaviour
             return false;
         }
 
-        if(selectedCard.Type == CardType.Creature)
+        cardHolderCards[_lane].gameObject.SetActive(true);
+        cardHolderCards[_lane].sprite = selectedCard.Sprite;
+
+        if(selectedCard.Type == CardType.Creature && PlayerCreatureLanes[_lane] == null)
         {
-            if(PlayerLanes[_lane] == null)
-            {
-                PlayerLanes[_lane] = selectedCard;
+            CardObject _cardClone = new CardObject();
+            _cardClone.CardName = selectedCard.CardName;
+            _cardClone.Sprite = selectedCard.Sprite;
+            _cardClone.Type = selectedCard.Type;
+            _cardClone.Health = selectedCard.Health;
+            _cardClone.MaxHealth = selectedCard.MaxHealth;
+            _cardClone.Damage = selectedCard.Damage;
 
-                selectedCard.Behaviour?.Initialize(_lane, 0);
+            PlayerCreatureLanes[_lane] = _cardClone;
 
-                RemoveCard(true, selectedCard);
+            // Spawn the card's model on the correct spot
+            playerLaneHologramObjects[_lane] = Instantiate(selectedCard.Hologram, playerLaneHologramMarkers[_lane]);
+            selectedCard.Behaviour?.Initialize(_lane, 1);
 
-                selectedCard = null;
-                selectedCardObject = null;
+            RemoveCard(true, selectedCard);
 
-                return true;
-            }
+            selectedCard = null;
+            selectedCardObject = null;
+
+            return true;
+            
         }
         else if(selectedCard.Type == CardType.Spell)
         {
-            selectedCard.Behaviour.Initialize(_lane, 0);
+            selectedCard.Behaviour.Initialize(_lane, 1);
             RemoveCard(true, selectedCard);
 
             selectedCard = null;
@@ -155,8 +198,19 @@ public class CardManager : MonoBehaviour
             
             return true;
         }
-        else if(selectedCard.Type == CardType.Structure)
+        else if(selectedCard.Type == CardType.Structure && PlayerStructureLanes[_lane] == null)
         {
+            CardObject _cardClone = new CardObject();
+            _cardClone.CardName = selectedCard.CardName;
+            _cardClone.Sprite = selectedCard.Sprite;
+            _cardClone.Type = selectedCard.Type;
+            _cardClone.Health = selectedCard.Health;
+            _cardClone.MaxHealth = selectedCard.MaxHealth;
+
+            PlayerStructureLanes[_lane] = _cardClone;
+
+            // Spawn the card's model on the correct spot
+            playerStructureLaneHologramObjects[_lane] = Instantiate(selectedCard.Hologram, playerStructureLaneHologramMarkers[_lane]);
             selectedCard.Behaviour.Initialize(_lane, 0);
             RemoveCard(true, selectedCard);
 
@@ -168,5 +222,23 @@ public class CardManager : MonoBehaviour
         
         // If the lane is occupied, return false to notify
         return false;
+    }
+
+    #endregion
+
+    public CardObject GetCardAt(int _lane, int _row)
+    {
+        switch(_row)
+        {
+            case 0:
+                return PlayerStructureLanes[_lane];
+                break;
+
+            case 1:
+                return PlayerCreatureLanes[_lane];
+                break;
+        }
+
+        return null;
     }
 }
