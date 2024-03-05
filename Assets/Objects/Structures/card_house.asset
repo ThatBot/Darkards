@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardName: Guardian del Bosque
   Sprite: {fileID: 21300000, guid: 9b6b13fb7e25b8041a5eccbe06540889, type: 3}
-  Hologram: {fileID: 919132149155446097, guid: 09211689bd907e64d9af685f55dc91ef, type: 3}
+  Hologram: {fileID: 919132149155446097, guid: 2ea8271266850ea4586910052a78f8a0, type: 3}
   Type: 2
   Behaviour: {fileID: 6150625343183348885, guid: 741722cb0d504c94288ce7360ef55c03,
     type: 3}

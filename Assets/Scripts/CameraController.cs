@@ -7,6 +7,7 @@ public class CameraController : MonoBehaviour
 {
     [SerializeField] private Transform normalMarker;
     [SerializeField] private Transform overheadMarker;
+    [SerializeField] private Transform sideMarker;
 
     private int currentPos = 0; // 0 -> Normal | 1 -> Overhead
 
@@ -20,6 +21,18 @@ public class CameraController : MonoBehaviour
             currentPos = 1;
         }
         else if(Input.GetKeyDown(KeyCode.S) && currentPos == 1)
+        {
+            transform.position = normalMarker.position;
+            transform.rotation = normalMarker.rotation;
+            currentPos = 0;
+        }
+        else if(Input.GetKeyDown(KeyCode.D) && currentPos == 0)
+        {
+            transform.position = sideMarker.position;
+            transform.rotation = sideMarker.rotation;
+            currentPos = 2;
+        }
+        else if(Input.GetKeyDown(KeyCode.A) && currentPos == 2)
         {
             transform.position = normalMarker.position;
             transform.rotation = normalMarker.rotation;
