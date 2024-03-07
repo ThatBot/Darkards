@@ -14,6 +14,8 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(PauseController.Instance.IsPaused) return;
+
         if(Input.GetKeyDown(KeyCode.W) && currentPos == 0)
         {
             transform.position = overheadMarker.position;
