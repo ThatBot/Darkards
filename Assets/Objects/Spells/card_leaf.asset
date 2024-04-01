@@ -18,6 +18,7 @@ MonoBehaviour:
   Type: 1
   Behaviour: {fileID: 2907570693278428711, guid: 88c1fec5ef7ad29499782d4bee181447,
     type: 3}
+  Beneficial: 1
   Cost: 0
   Health: 0
   MaxHealth: 0

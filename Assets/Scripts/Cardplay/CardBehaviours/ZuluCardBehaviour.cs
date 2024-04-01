@@ -8,16 +8,7 @@ public class ZuluCardBehaviour : CardBehaviour
     {
         Debug.Log("Cast death upon ye");
 
-        switch(row)
-        {
-            case 1:
-                
-                break;
-
-            case 2:
-
-                break;
-        }
+        CardManager.Instance.DamageCard(lane, row, 1);
 
         base.OnCastEffect();
     }

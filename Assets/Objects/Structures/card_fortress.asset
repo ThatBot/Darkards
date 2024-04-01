@@ -16,8 +16,9 @@ MonoBehaviour:
   Sprite: {fileID: 21300000, guid: 8675fe0dd65ef634abef2f29f1a64030, type: 3}
   Hologram: {fileID: 919132149155446097, guid: 8355ca5b256f7d447a6c319dde34f2ab, type: 3}
   Type: 2
-  Behaviour: {fileID: 4148047626461203796, guid: 630bb5f0309829142ae640f41e9867ad,
+  Behaviour: {fileID: 987479471958832643, guid: 630bb5f0309829142ae640f41e9867ad,
     type: 3}
+  Beneficial: 0
   Cost: 0
   Health: 15
   MaxHealth: 15

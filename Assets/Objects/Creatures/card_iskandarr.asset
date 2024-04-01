@@ -17,6 +17,7 @@ MonoBehaviour:
   Hologram: {fileID: 919132149155446097, guid: 01fb8ad45ebe01348918694498b0c0cb, type: 3}
   Type: 0
   Behaviour: {fileID: 0}
+  Beneficial: 0
   Cost: 0
   Health: 7
   MaxHealth: 7

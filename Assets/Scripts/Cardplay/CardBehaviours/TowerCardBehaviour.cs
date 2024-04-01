@@ -16,6 +16,7 @@ public class TowerCardBehaviour : CardBehaviour
     public override void OnTurnEffect()
     {
         CardObject _card = CardManager.Instance.GetCardAt(lane, 1);
+        if(_card == null) return;
         
         if(!affectedCards.Contains(_card))
         {

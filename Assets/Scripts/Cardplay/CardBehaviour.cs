@@ -20,6 +20,11 @@ public class CardBehaviour : MonoBehaviour
 
     }
 
+    public virtual void OnTokenSelect()
+    {
+        
+    }
+
     public virtual void OnTurnEffect()
     {
 
@@ -27,6 +32,6 @@ public class CardBehaviour : MonoBehaviour
 
     public virtual void OnDieEffect()
     {
-
+        
     }
 }
