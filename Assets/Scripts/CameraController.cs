@@ -1,14 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class CameraController : MonoBehaviour
 {
+    [Header("Camera Movement")]
     [SerializeField] private Transform normalMarker;
     [SerializeField] private Transform overheadMarker;
     [SerializeField] private Transform sideMarker;
+
+    [Header("Card UI")]
+    [SerializeField] private GameObject cardStatusObj;
+    [SerializeField] private Image cardSprite;
+    [SerializeField] private TMP_Text cardName;
+    [SerializeField] private TMP_Text cardDescription;
+    [SerializeField] private TMP_Text cardHealth;
+    [SerializeField] private TMP_Text cardDamage;
 
     private int selectedTokenLane = -1;
     private int selectedTokenRow = -1;
@@ -46,11 +56,11 @@ public class CameraController : MonoBehaviour
         }
 
         Ray _mouseRay = GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
-        if(Physics.Raycast(_mouseRay, out RaycastHit _hit) && Input.GetMouseButtonDown(0))
+        if(Physics.Raycast(_mouseRay, out RaycastHit _hit))
         {
             if(!CardManager.Instance.PlayerPriority) return;    // If it's not the players turn, do not let them play
 
-            if(_hit.transform.CompareTag("CardPlayArea"))
+            if(_hit.transform.CompareTag("CardPlayArea") && Input.GetMouseButtonDown(0))
             {
                 int _lane = Int32.Parse(_hit.transform.name);
                 CardManager.Instance.PlayCard(_lane - 1);
@@ -58,7 +68,7 @@ public class CameraController : MonoBehaviour
 
             if(_hit.transform.CompareTag("CardToken") && _hit.transform.name.Contains("Player"))
             {
-                if(selectedTokenLane != -1)
+                if(selectedTokenLane != -1 && Input.GetMouseButtonDown(0))
                 {
                     CardManager.Instance.ToggleTokenSelectMarker(true, selectedTokenLane, selectedTokenRow, Color.white);
                     selectedTokenLane = -1;
@@ -81,17 +91,23 @@ public class CameraController : MonoBehaviour
 
                     if(CardManager.Instance.GetCardAt(_lane, _row) != null)
                     {
-                        Debug.Log("Selected token at Lane:" + _lane + " Row:" + _row);
+                        CardStatus(_lane, _row);
+                        cardStatusObj.SetActive(true);
 
-                        CardManager.Instance.GetCardAt(_lane, _row).Behaviour?.OnTokenSelect();
-                        CardManager.Instance.ToggleTokenSelectMarker(true, _lane, _row, Color.red);
+                        if(Input.GetMouseButtonDown(0))
+                        {
+                            Debug.Log("Selected token at Lane:" + _lane + " Row:" + _row);
 
-                        selectedTokenLane = _lane;
-                        selectedTokenRow = _row;
+                            CardManager.Instance.GetCardAt(_lane, _row).Behaviour?.OnTokenSelect();
+                            CardManager.Instance.ToggleTokenSelectMarker(true, _lane, _row, Color.red);
+
+                            selectedTokenLane = _lane;
+                            selectedTokenRow = _row;
+                        }
                     }
                 }
             }
-            else if(_hit.transform.CompareTag("CardToken") && _hit.transform.name.Contains("Rival") && selectedTokenLane != -1)
+            else if(_hit.transform.CompareTag("CardToken") && _hit.transform.name.Contains("Rival"))
             {
                 int _lane = Int32.Parse(_hit.transform.name.Substring(_hit.transform.name.Length - 1)) - 1;
 
@@ -108,15 +124,23 @@ public class CameraController : MonoBehaviour
 
                 if(CardManager.Instance.GetCardAt(_lane, _row) != null)
                 {
-                    Debug.Log("Selected token at Lane:" + _lane + " Row:" + _row);
+                    CardStatus(_lane, _row);
+                    cardStatusObj.SetActive(true);
 
-                    CardManager.Instance.AttackCard(selectedTokenLane, selectedTokenRow, _lane, _row);
+                    if(Input.GetMouseButtonDown(0) && selectedTokenLane != -1)
+                    {
+                        Debug.Log("Selected token at Lane:" + _lane + " Row:" + _row);
 
-                    CardManager.Instance.ActionsLeft--;
+                        CardManager.Instance.AttackCard(selectedTokenLane, selectedTokenRow, _lane, _row);
+
+                        CardManager.Instance.ActionsLeft--;
+                    }
                 }
             }
-            else
+            else if(Input.GetMouseButtonDown(0))
             {
+                cardStatusObj.SetActive(false);
+
                 if(selectedTokenLane != -1)
                 {
                     CardManager.Instance.ToggleTokenSelectMarker(true, selectedTokenLane, selectedTokenRow, Color.white);
@@ -124,7 +148,26 @@ public class CameraController : MonoBehaviour
                     selectedTokenRow = -1;
                 }
             }
+            else
+            {
+                cardStatusObj.SetActive(false);
+            }
             
         }
+    }
+
+    private void CardStatus(int _lane, int _row)
+    {
+        CardObject _card = CardManager.Instance.GetCardAt(_lane, _row);
+
+        if(_card.Poisoned) cardName.color = new Color(0.5f, 1, 0.5f);
+        else if (_card.Protected) cardName.color = new Color(1, 0.8f, 0.5f);
+        else cardName.color = new Color(1, 1, 1);
+
+        cardSprite.sprite = _card.Sprite;
+        cardName.text = _card.CardName;
+        cardDescription.text = _card.CardDescription;
+        cardHealth.text = _card.Health + "/" + _card.MaxHealth;
+        cardDamage.text = _card.Damage.ToString();
     }
 }

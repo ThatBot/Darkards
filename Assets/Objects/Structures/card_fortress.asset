@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: card_fortress
   m_EditorClassIdentifier: 
   CardName: Asedio de Mythril
+  CardDescription: "Aumenta 2 puntos de da\xF1o"
   Sprite: {fileID: 21300000, guid: 8675fe0dd65ef634abef2f29f1a64030, type: 3}
   Hologram: {fileID: 919132149155446097, guid: 8355ca5b256f7d447a6c319dde34f2ab, type: 3}
   Type: 2
@@ -23,3 +24,5 @@ MonoBehaviour:
   Health: 15
   MaxHealth: 15
   Damage: 0
+  Protected: 0
+  Poisoned: 0

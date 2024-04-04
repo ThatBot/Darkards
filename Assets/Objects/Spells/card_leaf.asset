@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: card_leaf
   m_EditorClassIdentifier: 
   CardName: Hoja de Helsin
+  CardDescription: Cura 2 puntos de vida
   Sprite: {fileID: 21300000, guid: a3ccc9ada7717c845852a13495f01919, type: 3}
   Hologram: {fileID: 0}
   Type: 1
@@ -23,3 +24,5 @@ MonoBehaviour:
   Health: 0
   MaxHealth: 0
   Damage: 0
+  Protected: 0
+  Poisoned: 0

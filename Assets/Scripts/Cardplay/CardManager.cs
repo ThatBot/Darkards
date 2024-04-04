@@ -46,6 +46,11 @@ public class CardManager : MonoBehaviour
     private bool isOnAction = false;
 
     [Header("Scene References")]
+    [SerializeField] private GameObject victoryPanel;
+    [SerializeField] private GameObject defeatPanel;
+
+    [Space]
+
     [SerializeField] private Transform playerHandTransform;
     [SerializeField] private GameObject cardPrefab;
 
@@ -73,6 +78,9 @@ public class CardManager : MonoBehaviour
     [SerializeField] private List<Transform> rivalStructureLaneSelectedMarkers = new List<Transform>();
 
     [Space]
+
+    [SerializeField] private ParticleSystem[] playerLaneAttackEffects = new ParticleSystem[3];
+    [SerializeField] private ParticleSystem[] rivalLaneAttackEffects = new ParticleSystem[3];
 
     [SerializeField] private ParticleSystem[] playerLaneHurtEffects = new ParticleSystem[3];
     [SerializeField] private ParticleSystem[] rivalLaneHurtEffects = new ParticleSystem[3];
@@ -147,6 +155,8 @@ public class CardManager : MonoBehaviour
 
     private void Update()
     {
+        HandleWinCondition();
+
         if(ActionsLeft <= 0 || RivalActionsLeft <= 0) 
         {
             SwitchTurn();
@@ -156,6 +166,33 @@ public class CardManager : MonoBehaviour
         {
             isOnAction = true;
             rivalAI.ProcessAction();
+        }
+    }
+
+    private void HandleWinCondition()
+    {
+        bool _rivalLost = true;
+        bool _playerLost = true;
+
+        for (int i = 0; i < PlayerStructureLanes.Length; i++)
+        {
+            if(PlayerStructureLanes[i] != null) _playerLost = false;
+        }
+
+        for (int i = 0; i < RivalStructureLanes.Length; i++)
+        {
+            if(RivalStructureLanes[i] != null) _rivalLost = false;
+        }
+
+        if(_rivalLost)
+        {
+            PlayerPriority = true;
+            victoryPanel.SetActive(true);
+        }
+        else if(_playerLost)
+        {
+            PlayerPriority = true;
+            defeatPanel.SetActive(true);
         }
     }
 
@@ -170,7 +207,11 @@ public class CardManager : MonoBehaviour
 
             for (int i = 0; i < RivalCreatureLanes.Length; i++)
             {
-                if(RivalCreatureLanes[i] != null) RivalCreatureLanes[i].Behaviour?.OnTurnEffect();
+                if(RivalCreatureLanes[i] != null) 
+                {
+                    RivalCreatureLanes[i].Behaviour?.OnTurnEffect();
+                    if(RivalCreatureLanes[i].Poisoned) DamageCard(i, 2, 1);
+                }
             }
 
             for (int i = 0; i < RivalStructureLanes.Length; i++)
@@ -189,7 +230,11 @@ public class CardManager : MonoBehaviour
 
             for (int i = 0; i < PlayerCreatureLanes.Length; i++)
             {
-                if(PlayerCreatureLanes[i] != null) PlayerCreatureLanes[i].Behaviour?.OnTurnEffect();
+                if(PlayerCreatureLanes[i] != null) 
+                {
+                    PlayerCreatureLanes[i].Behaviour?.OnTurnEffect();
+                    if(PlayerCreatureLanes[i].Poisoned) DamageCard(i, 1, 1);
+                }
             }
 
             for (int i = 0; i < PlayerStructureLanes.Length; i++)
@@ -346,6 +391,12 @@ public class CardManager : MonoBehaviour
 
         _defendant.Health -= _attacker.Damage;
 
+        if(_defendant.Protected)
+        {
+            _defendant.Protected = false;
+            return;
+        }
+
         if(_attackerRow > 1) RivalActionsLeft--;
         else 
         {
@@ -363,18 +414,22 @@ public class CardManager : MonoBehaviour
         {
             case 0:
                 playerStructureLaneHurtEffects[_defendantLane].Play();
+                rivalLaneAttackEffects[_attackerLane].Play();
                 break;
 
             case 1:
                 playerLaneHurtEffects[_defendantLane].Play();
+                rivalLaneAttackEffects[_attackerLane].Play();
                 break;
 
             case 2:
                 rivalLaneHurtEffects[_defendantLane].Play();
+                playerLaneAttackEffects[_attackerLane].Play();
                 break;
 
             case 3:
                 rivalStructureLaneHurtEffects[_defendantLane].Play();
+                playerLaneAttackEffects[_attackerLane].Play();
                 break;
         }
 

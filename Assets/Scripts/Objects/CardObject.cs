@@ -7,6 +7,7 @@ public class CardObject : ScriptableObject
 {
     [Header("Cosmetic")]
     public string CardName;
+    public string CardDescription;
     public Sprite Sprite;
     public GameObject Hologram;
 

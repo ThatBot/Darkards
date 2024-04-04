@@ -9,13 +9,16 @@ public class RivalAI
 
     private int consecutiveDraws = 0;
     private const int MAX_CONSECUTIVE_DRAWS = 2;
+    private int consecutiveActions = 0;
+    private int lastActionIndex = -1;
+    private const int MAX_CONSECUTIVE_ACTIONS = 3;
 
     public void ProcessAction()
     {
         Debug.Log("Processing AI action");
         Debug.Log("Current stance: [Aggression: " + AggressionTokens + ", Defensive: " + DefensiveTokens + "]");
 
-        if(CardManager.Instance.RivalHand.Count < 2 && consecutiveDraws < MAX_CONSECUTIVE_DRAWS)
+        if(CardManager.Instance.RivalHand.Count < 2 && consecutiveDraws < MAX_CONSECUTIVE_DRAWS && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
         {
             Debug.Log("Hand low, drawing");
             DrawAction();
@@ -51,7 +54,7 @@ public class RivalAI
         Debug.Log("Current board: [AI Full: " + _fieldFull + ", Player Full: " + _playerFieldFull + "]");
         Debug.Log("Current hand: [Creatures?: " + _hasCreatures + ", Spells?: " + _hasSpells + "]");
 
-        if(!_playerFieldFull && _hasCreatures)
+        if((!_playerFieldFull && _hasCreatures) && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
         {
             Debug.Log("Casting a creature to counteract player");
             PlayAction(true, _playerEmptyLane);
@@ -60,13 +63,13 @@ public class RivalAI
 
         if(!_fieldFull)
         {
-            if(AggressionTokens > 4)
+            if(AggressionTokens > 4 && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
             {
                 Debug.Log("Aggression outburst, attacking");
                 AttackAction();
                 return;
             }
-            else if(_hasCreatures)
+            else if(_hasCreatures && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
             {
                 Debug.Log("Casting a creature");
                 PlayAction(true);
@@ -74,27 +77,27 @@ public class RivalAI
             }
         }
 
-        if(AggressionTokens > DefensiveTokens || !_hasSpells)
+        if((AggressionTokens > DefensiveTokens || !_hasSpells) && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
         {
             Debug.Log("Aggressive stance, attacking");
             AttackAction();
         }
-        else if(AggressionTokens == DefensiveTokens && CardManager.Instance.RivalDeck.Count <= 0 && consecutiveDraws < MAX_CONSECUTIVE_DRAWS)
+        else if((AggressionTokens == DefensiveTokens && CardManager.Instance.RivalDeck.Count <= 0) && consecutiveDraws < MAX_CONSECUTIVE_DRAWS && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
         {
             Debug.Log("Neutral stance, drawing");
             DrawAction();
         }
-        else if(_hasSpells)
+        else if((_hasSpells) && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
         {
             Debug.Log("Defensive stance, casting");
             PlayAction(false);
         }
-        else if(CardManager.Instance.RivalDeck.Count <= 0 && consecutiveDraws < MAX_CONSECUTIVE_DRAWS)
+        else if((CardManager.Instance.RivalDeck.Count <= 0) && consecutiveDraws < MAX_CONSECUTIVE_DRAWS && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
         {
             Debug.Log("No other option, drawing");
             DrawAction();
         }
-        else // There is nothing you can do, give up, surrender, take the L
+        else // There is nothing you can do, pass the turn
         {
             Debug.Log("No other option, passing turn");
             CardManager.Instance.SwitchTurn();
@@ -103,6 +106,10 @@ public class RivalAI
 
     public void AttackAction()
     {
+        if(lastActionIndex == 1) consecutiveActions++;
+        else consecutiveActions = 0;
+        lastActionIndex = 1;
+
         List<int> _availableAttackLanes = new List<int>();
 
         for (int i = 0; i < CardManager.Instance.RivalCreatureLanes.Length; i++)
@@ -142,12 +149,20 @@ public class RivalAI
 
     public void DrawAction()
     {
+        if(lastActionIndex == 2) consecutiveActions++;
+        else consecutiveActions = 0;
+        lastActionIndex = 2;
+
         consecutiveDraws++;
         CardManager.Instance.DrawCard(false);
     }
  
     public void PlayAction(bool _creature)
     {
+        if(lastActionIndex == 3) consecutiveActions++;
+        else consecutiveActions = 0;
+        lastActionIndex = 3;
+
         if(_creature)
         {
             int _cardIndex = -1;
@@ -225,6 +240,10 @@ public class RivalAI
 
     public void PlayAction(bool _creature, int _lane)
     {
+        if(lastActionIndex == 3) consecutiveActions++;
+        else consecutiveActions = 0;
+        lastActionIndex = 3;
+
         if(_creature)
         {
             int _cardIndex = -1;

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a10346d4d4c1b941b101c2eead84c34, type: 3}
+  m_Name: card_corruption
+  m_EditorClassIdentifier: 
+  CardName: "Corrupci\xF3n de Flynch"
+  CardDescription: "Inflinge +1 de da\xF1o por turno a la carta afectada"
+  Sprite: {fileID: 21300000, guid: 47d8f888d2f3c9844aae764d0720c877, type: 3}
+  Hologram: {fileID: 0}
+  Type: 1
+  Behaviour: {fileID: 3577119434118361374, guid: d27631e3caba7ae469d80d84f7f1c596,
+    type: 3}
+  Beneficial: 0
+  Cost: 0
+  Health: 0
+  MaxHealth: 0
+  Damage: 0
+  Protected: 0
+  Poisoned: 0
