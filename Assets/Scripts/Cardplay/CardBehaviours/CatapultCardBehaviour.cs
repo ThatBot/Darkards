@@ -6,6 +6,7 @@ public class CatapultCardBehaviour : CardBehaviour
 {
     public override void OnTurnEffect()
     {
+        // Damage card depending on which side of the board the structure is at
         if(CardManager.Instance.GetCardAt(lane,2) != null)
         {
             CardManager.Instance.DamageCard(lane, 2, 1);

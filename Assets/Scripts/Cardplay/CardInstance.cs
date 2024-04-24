@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// Card visual used in the player's hand
+/// </summary>
 public class CardInstance : MonoBehaviour
 {
     [SerializeField] private float pointerOffset = 50.0f;

@@ -93,21 +93,23 @@ public class CardManager : MonoBehaviour
 
     private void Start()
     {
+        // Populate the decks for both the player and rival
         int _rand = Random.Range(0, AvailableDecks.Length);
 
         for (int i = 0; i < PlayerDeckObject.Deck.Count; i++)
         {
             AddCardToDeck(true, PlayerDeckObject.Deck[i]);
         }
-
-        DrawFreeCard(true);
-        DrawFreeCard(true);
-        DrawFreeCard(true);
         
         for (int i = 0; i < AvailableDecks[_rand].Deck.Count; i++)
         {
             AddCardToDeck(false, AvailableDecks[_rand].Deck[i]);
         }
+
+        // Obtain the first three cards, first the player and then the rival
+        DrawFreeCard(true);
+        DrawFreeCard(true);
+        DrawFreeCard(true);
 
         DrawFreeCard(false);
         DrawFreeCard(false);
@@ -152,7 +154,7 @@ public class CardManager : MonoBehaviour
 
             // Spawn the card's model on the correct spot
             rivalStructureLaneHologramObjects[i] = Instantiate(_structureCard.Hologram, rivalStructureLaneHologramMarkers[i]);
-            _structureCard.Behaviour.Initialize(i, 0);
+            _structureCard.Behaviour.Initialize(i, 3);
         }
     }
 
@@ -160,6 +162,7 @@ public class CardManager : MonoBehaviour
     {
         HandleWinCondition();
 
+        // Switch turns when actions run out
         if(ActionsLeft <= 0 || RivalActionsLeft <= 0) 
         {
             SwitchTurn();
@@ -177,6 +180,7 @@ public class CardManager : MonoBehaviour
         bool _rivalLost = true;
         bool _playerLost = true;
 
+        // Check for structures on both sides
         for (int i = 0; i < PlayerStructureLanes.Length; i++)
         {
             if(PlayerStructureLanes[i] != null) _playerLost = false;
@@ -199,6 +203,9 @@ public class CardManager : MonoBehaviour
         }
     }
 
+/// <summary>
+/// Handles switching between the player's and the rival's turn. Calls the OnTurnEffect() event in card behaviours
+/// </summary>
     public void SwitchTurn()
     {
         ActionsLeft = actionCapacity;
@@ -208,6 +215,7 @@ public class CardManager : MonoBehaviour
         {
             PlayerPriority = false;
 
+            // Switch turn event for rival
             for (int i = 0; i < RivalCreatureLanes.Length; i++)
             {
                 if(RivalCreatureLanes[i] != null) 
@@ -231,6 +239,7 @@ public class CardManager : MonoBehaviour
         {
             PlayerPriority = true;
 
+            // Switch turn event for player
             for (int i = 0; i < PlayerCreatureLanes.Length; i++)
             {
                 if(PlayerCreatureLanes[i] != null) 
@@ -249,6 +258,11 @@ public class CardManager : MonoBehaviour
         }
     }
 
+/// <summary>
+/// Draws a card and consumes an action
+/// </summary>
+/// <param name="_player">Set to true if the player is the one taking the action</param>
+/// <returns>Returns true if the card was drawn, returns false if the hand is full</returns>
     public bool DrawCard(bool _player)
     {
         if (_player && PlayerHand.Count <= handCapacity && PlayerDeck.Count > 0)
@@ -289,6 +303,11 @@ public class CardManager : MonoBehaviour
         return false;
     }
 
+/// <summary>
+/// Draws a card but does not consume an action
+/// </summary>
+/// <param name="_player">Set to true if the player is the one taking the action</param>
+/// <returns>Returns true if the card was drawn, returns false if the hand is full</returns>
     public bool DrawFreeCard(bool _player)
     {
         if (_player && PlayerHand.Count <= handCapacity && PlayerDeck.Count > 0)
@@ -324,6 +343,12 @@ public class CardManager : MonoBehaviour
     }
 
     #region Deck Management
+/// <summary>
+/// Adds a card to a deck
+/// </summary>
+/// <param name="_player">Set to true if the player is the one taking the action</param>
+/// <param name="_card">Card to add into the deck</param>
+/// <returns>Returns true if the card was added, returns false if the deck is full</returns>
     public bool AddCardToDeck(bool _player, CardObject _card)
     {
         if(_player && PlayerDeck.Count >= deckCapacity) return false;
@@ -335,6 +360,12 @@ public class CardManager : MonoBehaviour
         return true;
     }
 
+/// <summary>
+/// Removes a card from a hand
+/// </summary>
+/// <param name="_player">Set to true if the player is the one taking the action</param>
+/// <param name="_card">Card to remove from the deck</param>
+/// <returns>Returns true if the card was removed, returns false if the card was not found in the hand</returns>
     public bool RemoveCard(bool _player, CardObject _card)
     {
         if(_player)
@@ -387,6 +418,14 @@ public class CardManager : MonoBehaviour
         selectedCardObject = null;
     }
 
+/// <summary>
+/// Handles attacks between an attacker card and a defendant card. Calls OnDieEffect() event in card behaviours
+/// </summary>
+/// <param name="_attackerLane">Lane of attacker card [0-2]</param>
+/// <param name="_attackerRow">Row of attacker card, [0-1] for player and [2-3] for rival</param>
+/// <param name="_defendantLane">Lane of defendant card [0-2]</param>
+/// <param name="_defendantRow">Row of defendant card, [0-1] for player and [2-3] for rival</param>
+/// <returns>Returns false if the defendant is a blocked structure, returns true in any other case</returns>
     public bool AttackCard(int _attackerLane, int _attackerRow, int _defendantLane, int _defendantRow)
     {
         // Prevent attacks to structures when there is a creature in the way
@@ -493,6 +532,12 @@ public class CardManager : MonoBehaviour
         return true;
     }
 
+/// <summary>
+/// Apply damage to a card. Calls OnDieEffect() event in card behaviours
+/// </summary>
+/// <param name="_lane">Lane of card to damage [0-2]</param>
+/// <param name="_row">Row of card to damage, [0-1] for player and [2-3] for rival</param>
+/// <param name="_damage">Damage to apply</param>
     public void DamageCard(int _lane, int _row, int _damage)
     {
         CardObject _defendant = GetCardAt(_lane, _row);
@@ -605,6 +650,11 @@ public class CardManager : MonoBehaviour
         }
     }
 
+/// <summary>
+/// Plays selected card in the provided lane. Requires a card to be selected before being called, use SelectCardForPlay(). Calls Initialize() in card behaviours
+/// </summary>
+/// <param name="_lane">Lane in which to add the card [0-2]</param>
+/// <returns>Returns false if no card was selected or if the lane was occupied</returns>
     public bool PlayCard(int _lane)
     {
         if(ActionsLeft <= 0) return false;
@@ -697,6 +747,11 @@ public class CardManager : MonoBehaviour
         return false;
     }
 
+/// <summary>
+/// Plays token from the tokenCards[] array in the provided lane, does not consume an action. Calls Initialize() in card behaviours
+/// </summary>
+/// <param name="_lane">Lane in which to add the token [0-2]</param>
+/// <param name="_tokenIndex">Index of the token in the tokenCards[] array</param>
     public void PlayTokenCard(int _lane, int _tokenIndex)
     {
         CardObject _card = tokenCards[_tokenIndex];
@@ -718,6 +773,13 @@ public class CardManager : MonoBehaviour
         _card.Behaviour?.Initialize(_lane, 1);
     }
 
+/// <summary>
+/// Plays card from the RivalHand[] list in the provided lane and row. Calls Initialize() in card behaviours.
+/// </summary>
+/// <param name="_lane">Lane in which to add the card [0-2]</param>
+/// <param name="_row">Row in which to add the card, it must be a rival owned row [2-3]</param>
+/// <param name="_cardIndex">Index of the card in the RivalHand[] list</param>
+/// <returns>Returns false if the lane was occupied</returns>
     public bool PlayRivalCard(int _lane, int _row, int _cardIndex)
     {
         if(RivalActionsLeft <= 0) SwitchTurn();
@@ -797,6 +859,12 @@ public class CardManager : MonoBehaviour
     }
     #endregion
 
+/// <summary>
+/// Gets a card in the specified position on the board
+/// </summary>
+/// <param name="_lane">Card's lane [0-2]</param>
+/// <param name="_row">Card's row, [0-1] for player and [2-3] for rival</param>
+/// <returns>Returns the CardObject in that position, or null if the position is empty</returns>
     public CardObject GetCardAt(int _lane, int _row)
     {
         switch(_row)

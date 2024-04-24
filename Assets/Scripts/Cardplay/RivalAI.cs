@@ -18,6 +18,7 @@ public class RivalAI
         Debug.Log("Processing AI action");
         Debug.Log("Current stance: [Aggression: " + AggressionTokens + ", Defensive: " + DefensiveTokens + "]");
 
+        // Check if our hand is low and we haven't drawn recently
         if(CardManager.Instance.RivalHand.Count < 2 && consecutiveDraws < MAX_CONSECUTIVE_DRAWS && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
         {
             Debug.Log("Hand low, drawing");
@@ -31,11 +32,13 @@ public class RivalAI
         bool _hasSpells = false;
         int _playerEmptyLane = -1;
 
+        // Check if our creature field is full
         for (int i = 0; i < CardManager.Instance.RivalCreatureLanes.Length; i++)
         {
             if(CardManager.Instance.RivalCreatureLanes[i] == null) _fieldFull = false;
         }
         
+        // Check if the player's creature field is full
         for (int i = 0; i < CardManager.Instance.PlayerCreatureLanes.Length; i++)
         {
             if(CardManager.Instance.PlayerCreatureLanes[i] == null) 
@@ -45,6 +48,7 @@ public class RivalAI
             }
         }
 
+        // Check if our hand has creatures & spells
         for (int i = 0; i < CardManager.Instance.RivalHand.Count; i++)
         {
             if(CardManager.Instance.RivalHand[i].Type == CardType.Creature) _hasCreatures = true;
@@ -54,6 +58,7 @@ public class RivalAI
         Debug.Log("Current board: [AI Full: " + _fieldFull + ", Player Full: " + _playerFieldFull + "]");
         Debug.Log("Current hand: [Creatures?: " + _hasCreatures + ", Spells?: " + _hasSpells + "]");
 
+        // If there is a hole in the player's creature field, place a creature there to exploit it
         if((!_playerFieldFull && _hasCreatures) && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
         {
             Debug.Log("Casting a creature to counteract player");
@@ -63,6 +68,7 @@ public class RivalAI
 
         if(!_fieldFull)
         {
+            // If we are too aggressive attack, otherwise try to place a creature
             if(AggressionTokens > 4 && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
             {
                 Debug.Log("Aggression outburst, attacking");
@@ -77,27 +83,31 @@ public class RivalAI
             }
         }
 
+        // If we are more aggressive than defensive, attack
         if((AggressionTokens > DefensiveTokens || !_hasSpells) && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
         {
             Debug.Log("Aggressive stance, attacking");
             AttackAction();
         }
+        // If we are aggressive & defensive, assume a neutral position and draw
         else if((AggressionTokens == DefensiveTokens && CardManager.Instance.RivalDeck.Count <= 0) && consecutiveDraws < MAX_CONSECUTIVE_DRAWS && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
         {
             Debug.Log("Neutral stance, drawing");
             DrawAction();
         }
+        // If we are more defensive than aggressive, cast spells
         else if((_hasSpells) && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
         {
             Debug.Log("Defensive stance, casting");
             PlayAction(false);
         }
+        // If there is no other option, draw
         else if((CardManager.Instance.RivalDeck.Count <= 0) && consecutiveDraws < MAX_CONSECUTIVE_DRAWS && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
         {
             Debug.Log("No other option, drawing");
             DrawAction();
         }
-        else // There is nothing you can do, pass the turn
+        else // If there is nothing we can do, pass the turn
         {
             Debug.Log("No other option, passing turn");
             CardManager.Instance.SwitchTurn();
@@ -106,24 +116,27 @@ public class RivalAI
 
     public void AttackAction()
     {
+        // Check we haven't attacked yet, otherwise increment the counter
         if(lastActionIndex == 1) consecutiveActions++;
         else consecutiveActions = 0;
         lastActionIndex = 1;
 
         List<int> _availableAttackLanes = new List<int>();
 
+        // Check for creatures in our lanes
         for (int i = 0; i < CardManager.Instance.RivalCreatureLanes.Length; i++)
         {
-            _availableAttackLanes.Add(i);
+            if(CardManager.Instance.RivalCreatureLanes[i] != null)
+                _availableAttackLanes.Add(i);
         }
 
         int _attacker = _availableAttackLanes[Random.Range(0, _availableAttackLanes.Count)];
         int _defendant = -1;
         int _rand = -1;
 
+        // Choose which player lane to attack, taking blockers into consideration
         while(_defendant != -1)
         {
-            // Used to select lane to attack
             _rand = Random.Range(0, 2);
 
             if(CardManager.Instance.PlayerCreatureLanes[_rand] == null)
@@ -149,6 +162,7 @@ public class RivalAI
 
     public void DrawAction()
     {
+        // Check we haven't drawn yet, otherwise increment the counter
         if(lastActionIndex == 2) consecutiveActions++;
         else consecutiveActions = 0;
         lastActionIndex = 2;
@@ -159,6 +173,7 @@ public class RivalAI
  
     public void PlayAction(bool _creature)
     {
+        // Check we haven't played a card yet, otherwise increment the counter
         if(lastActionIndex == 3) consecutiveActions++;
         else consecutiveActions = 0;
         lastActionIndex = 3;
@@ -186,7 +201,7 @@ public class RivalAI
                 }
             }
         }
-        else
+        else // Card is a spell
         {
             int _cardIndex = -1;
 
@@ -240,6 +255,7 @@ public class RivalAI
 
     public void PlayAction(bool _creature, int _lane)
     {
+        // Check we haven't played a card yet, otherwise increment the counter
         if(lastActionIndex == 3) consecutiveActions++;
         else consecutiveActions = 0;
         lastActionIndex = 3;

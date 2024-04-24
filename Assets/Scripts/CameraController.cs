@@ -23,9 +23,8 @@ public class CameraController : MonoBehaviour
     private int selectedTokenLane = -1;
     private int selectedTokenRow = -1;
 
-    private int currentPos = 0; // 0 -> Normal | 1 -> Overhead
+    private int currentPos = 0; // 0 -> Normal | 1 -> Overhead | 2 -> Side
 
-    // Update is called once per frame
     void Update()
     {
         if(PauseController.Instance.IsPaused) return;
@@ -58,16 +57,19 @@ public class CameraController : MonoBehaviour
         Ray _mouseRay = GetComponent<Camera>().ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(_mouseRay, out RaycastHit _hit))
         {
-            if(!CardManager.Instance.PlayerPriority) return;    // If it's not the players turn, do not let them play
+            if(!CardManager.Instance.PlayerPriority) return;    // If it's not the players turn, do not let them do any action
 
+            // If we hit the card play area, play a card
             if(_hit.transform.CompareTag("CardPlayArea") && Input.GetMouseButtonDown(0))
             {
                 int _lane = Int32.Parse(_hit.transform.name);
                 CardManager.Instance.PlayCard(_lane - 1);
             }
 
+            // If we hit a player's token on the board
             if(_hit.transform.CompareTag("CardToken") && _hit.transform.name.Contains("Player"))
             {
+                // Deselect token if we have one selected
                 if(selectedTokenLane != -1 && Input.GetMouseButtonDown(0))
                 {
                     CardManager.Instance.ToggleTokenSelectMarker(true, selectedTokenLane, selectedTokenRow, Color.white);
@@ -76,10 +78,12 @@ public class CameraController : MonoBehaviour
                 }
                 else
                 {
+                    // Get the lane from the collider's name
                     int _lane = Int32.Parse(_hit.transform.name.Substring(_hit.transform.name.Length - 1)) - 1;
 
                     int _row = -1;
 
+                    // Get the row from the collider's name
                     if(_hit.transform.name.Contains("Structure"))
                     {
                         _row = 0;
@@ -91,9 +95,11 @@ public class CameraController : MonoBehaviour
 
                     if(CardManager.Instance.GetCardAt(_lane, _row) != null)
                     {
+                        // Show the card info box when hovering over the card
                         CardStatus(_lane, _row);
                         cardStatusObj.SetActive(true);
 
+                        // Select the token if clicked
                         if(Input.GetMouseButtonDown(0))
                         {
                             Debug.Log("Selected token at Lane:" + _lane + " Row:" + _row);
@@ -107,6 +113,7 @@ public class CameraController : MonoBehaviour
                     }
                 }
             }
+            // If we hit a rival's token on the board
             else if(_hit.transform.CompareTag("CardToken") && _hit.transform.name.Contains("Rival"))
             {
                 int _lane = Int32.Parse(_hit.transform.name.Substring(_hit.transform.name.Length - 1)) - 1;
@@ -124,9 +131,11 @@ public class CameraController : MonoBehaviour
 
                 if(CardManager.Instance.GetCardAt(_lane, _row) != null)
                 {
+                    // Show the card info box when hovering over the card
                     CardStatus(_lane, _row);
                     cardStatusObj.SetActive(true);
 
+                    // Attack the token if clicked and there is a selected token
                     if(Input.GetMouseButtonDown(0) && selectedTokenLane != -1)
                     {
                         Debug.Log("Selected token at Lane:" + _lane + " Row:" + _row);
@@ -136,10 +145,12 @@ public class CameraController : MonoBehaviour
                     }
                 }
             }
-            else if(Input.GetMouseButtonDown(0))
+            else if(Input.GetMouseButtonDown(0)) // The cursor isn't in a token or a play area but we clicked the mouse
             {
+                // Hide the card info box
                 cardStatusObj.SetActive(false);
 
+                // Deselect the token
                 if(selectedTokenLane != -1)
                 {
                     CardManager.Instance.ToggleTokenSelectMarker(true, selectedTokenLane, selectedTokenRow, Color.white);
@@ -147,8 +158,9 @@ public class CameraController : MonoBehaviour
                     selectedTokenRow = -1;
                 }
             }
-            else
+            else // The cursor isn't in a token or a play area
             {
+                // Hide the card info box
                 cardStatusObj.SetActive(false);
             }
             
@@ -159,10 +171,12 @@ public class CameraController : MonoBehaviour
     {
         CardObject _card = CardManager.Instance.GetCardAt(_lane, _row);
 
+        // Change name color to show status ailment
         if(_card.Poisoned) cardName.color = new Color(0.5f, 1, 0.5f);
         else if (_card.Protected) cardName.color = new Color(1, 0.8f, 0.5f);
         else cardName.color = new Color(1, 1, 1);
 
+        // Populate the info box
         cardSprite.sprite = _card.Sprite;
         cardName.text = _card.CardName;
         cardDescription.text = _card.CardDescription;

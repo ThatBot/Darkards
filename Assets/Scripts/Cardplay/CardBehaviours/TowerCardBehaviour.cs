@@ -15,7 +15,10 @@ public class TowerCardBehaviour : CardBehaviour
 
     public override void OnTurnEffect()
     {
-        CardObject _card = CardManager.Instance.GetCardAt(lane, 1);
+        // Obtain card depending on which side of the board the structure is at
+        CardObject _card = null;
+        if(row == 0) _card = CardManager.Instance.GetCardAt(lane, 1);
+        else if(row == 3) _card = CardManager.Instance.GetCardAt(lane, 2);
         if(_card == null) return;
         
         if(!affectedCards.Contains(_card))
