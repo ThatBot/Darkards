@@ -28,6 +28,7 @@ public class CardManager : MonoBehaviour
     public int ActionsLeft = 3;
     public int RivalActionsLeft = 3;
     public bool PlayerPriority = true;
+    [SerializeField] private CardObject[] tokenCards;
 
     [Header("Player Data")]
     public DeckObject PlayerDeckObject;
@@ -119,6 +120,7 @@ public class CardManager : MonoBehaviour
 
             CardObject _cardClone = new CardObject();
             _cardClone.CardName = _structureCard.CardName;
+            _cardClone.CardDescription = _structureCard.CardDescription;
             _cardClone.Sprite = _structureCard.Sprite;
             _cardClone.Type = _structureCard.Type;
             _cardClone.Health = _structureCard.Health;
@@ -139,6 +141,7 @@ public class CardManager : MonoBehaviour
 
             CardObject _cardClone = new CardObject();
             _cardClone.CardName = _structureCard.CardName;
+            _cardClone.CardDescription = _structureCard.CardDescription;
             _cardClone.Sprite = _structureCard.Sprite;
             _cardClone.Type = _structureCard.Type;
             _cardClone.Health = _structureCard.Health;
@@ -384,8 +387,18 @@ public class CardManager : MonoBehaviour
         selectedCardObject = null;
     }
 
-    public void AttackCard(int _attackerLane, int _attackerRow, int _defendantLane, int _defendantRow)
+    public bool AttackCard(int _attackerLane, int _attackerRow, int _defendantLane, int _defendantRow)
     {
+        // Prevent attacks to structures when there is a creature in the way
+        if(_defendantRow == 3 || _attackerLane <= 1)
+        {
+            if(GetCardAt(_defendantLane, 2) != null) return false;
+        }
+        else if(_defendantRow == 0 || _attackerLane >= 2)
+        {
+            if(GetCardAt(_defendantLane, 1) != null) return false;
+        }
+
         CardObject _attacker = GetCardAt(_attackerLane, _attackerRow);
         CardObject _defendant = GetCardAt(_defendantLane, _defendantRow);
 
@@ -394,7 +407,7 @@ public class CardManager : MonoBehaviour
         if(_defendant.Protected)
         {
             _defendant.Protected = false;
-            return;
+            return true;
         }
 
         if(_attackerRow > 1) RivalActionsLeft--;
@@ -473,9 +486,11 @@ public class CardManager : MonoBehaviour
                     rivalAI.DefensiveTokens++;
                     break;
             }
+
         }
 
         if(_attackerRow > 1) isOnAction = false;
+        return true;
     }
 
     public void DamageCard(int _lane, int _row, int _damage)
@@ -505,7 +520,7 @@ public class CardManager : MonoBehaviour
 
         if(_defendant.Health <= 0) 
         {
-            _defendant.Behaviour.OnDieEffect();
+            _defendant.Behaviour?.OnDieEffect();
 
             switch(_row)
             {
@@ -608,6 +623,7 @@ public class CardManager : MonoBehaviour
 
             CardObject _cardClone = new CardObject();
             _cardClone.CardName = selectedCard.CardName;
+            _cardClone.CardDescription = selectedCard.CardDescription;
             _cardClone.Sprite = selectedCard.Sprite;
             _cardClone.Type = selectedCard.Type;
             _cardClone.Health = selectedCard.Health;
@@ -655,6 +671,7 @@ public class CardManager : MonoBehaviour
         {
             CardObject _cardClone = new CardObject();
             _cardClone.CardName = selectedCard.CardName;
+            _cardClone.CardDescription = selectedCard.CardDescription;
             _cardClone.Sprite = selectedCard.Sprite;
             _cardClone.Type = selectedCard.Type;
             _cardClone.Health = selectedCard.Health;
@@ -680,6 +697,27 @@ public class CardManager : MonoBehaviour
         return false;
     }
 
+    public void PlayTokenCard(int _lane, int _tokenIndex)
+    {
+        CardObject _card = tokenCards[_tokenIndex];
+
+        CardObject _cardClone = new CardObject();
+        _cardClone.CardName = _card.CardName;
+        _cardClone.CardDescription = _card.CardDescription;
+        _cardClone.Sprite = _card.Sprite;
+        _cardClone.Type = _card.Type;
+        _cardClone.Health = _card.Health;
+        _cardClone.MaxHealth = _card.MaxHealth;
+        _cardClone.Damage = _card.Damage;
+        _cardClone.Behaviour = _card.Behaviour;
+
+        PlayerCreatureLanes[_lane] = _cardClone;
+
+        // Spawn the card's model on the correct spot
+        playerLaneHologramObjects[_lane] = Instantiate(_card.Hologram, playerLaneHologramMarkers[_lane]);
+        _card.Behaviour?.Initialize(_lane, 1);
+    }
+
     public bool PlayRivalCard(int _lane, int _row, int _cardIndex)
     {
         if(RivalActionsLeft <= 0) SwitchTurn();
@@ -690,6 +728,7 @@ public class CardManager : MonoBehaviour
         {
             CardObject _cardClone = new CardObject();
             _cardClone.CardName = _card.CardName;
+            _cardClone.CardDescription = _card.CardDescription;
             _cardClone.Sprite = _card.Sprite;
             _cardClone.Type = _card.Type;
             _cardClone.Health = _card.Health;
@@ -732,6 +771,7 @@ public class CardManager : MonoBehaviour
         {
             CardObject _cardClone = new CardObject();
             _cardClone.CardName = _card.CardName;
+            _cardClone.CardDescription = _card.CardDescription;
             _cardClone.Sprite = _card.Sprite;
             _cardClone.Type = _card.Type;
             _cardClone.Health = _card.Health;

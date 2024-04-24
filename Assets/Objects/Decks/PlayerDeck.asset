@@ -16,7 +16,7 @@ MonoBehaviour:
   Structures:
   - {fileID: 11400000, guid: 7b51b96645c92fd4a8fd72e598d17cc2, type: 2}
   - {fileID: 11400000, guid: 42cf696f7cdad6c4dbaec63f7caaa7cd, type: 2}
-  - {fileID: 11400000, guid: 79b95d54eee5dea4e9e0ff167e90d942, type: 2}
+  - {fileID: 11400000, guid: cce78a054647bf74394eefff3a44c761, type: 2}
   Deck:
   - {fileID: 11400000, guid: ca44d34a0478ade47b87a66772945a48, type: 2}
   - {fileID: 11400000, guid: 95cd38f6666035744b13f30b42e6929c, type: 2}

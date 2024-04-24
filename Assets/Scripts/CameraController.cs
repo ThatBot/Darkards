@@ -131,9 +131,8 @@ public class CameraController : MonoBehaviour
                     {
                         Debug.Log("Selected token at Lane:" + _lane + " Row:" + _row);
 
-                        CardManager.Instance.AttackCard(selectedTokenLane, selectedTokenRow, _lane, _row);
-
-                        CardManager.Instance.ActionsLeft--;
+                        if(CardManager.Instance.AttackCard(selectedTokenLane, selectedTokenRow, _lane, _row))
+                            CardManager.Instance.ActionsLeft--;
                     }
                 }
             }

@@ -21287,6 +21287,8 @@ MonoBehaviour:
   ActionsLeft: 3
   RivalActionsLeft: 3
   PlayerPriority: 1
+  tokenCards:
+  - {fileID: 11400000, guid: fc0eda83c460d7749ad1606cd117d366, type: 2}
   PlayerDeckObject: {fileID: 11400000, guid: 1bf484524a9a4964aaeb29cd6e69ed8c, type: 2}
   PlayerHand: []
   PlayerDeck: []
