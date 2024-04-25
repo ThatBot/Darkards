@@ -6,13 +6,16 @@ using UnityEngine.SceneManagement;
 public class PauseController : MonoBehaviour
 {
     [SerializeField] private GameObject pauseMenu;
-    public static PauseController Instance;
     public bool IsPaused;
+    #region Singleton definition
+    public static PauseController Instance;
 
     private void Awake()
     {
         Instance = this;
     }
+
+    #endregion
 
     void Update()
     {

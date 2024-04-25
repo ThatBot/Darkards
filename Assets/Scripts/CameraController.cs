@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public class CameraController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Transform normalMarker;
     [SerializeField] private Transform overheadMarker;
     [SerializeField] private Transform sideMarker;
+    private bool isMoving = false;
 
     [Header("Card UI")]
     [SerializeField] private GameObject cardStatusObj;
@@ -27,30 +29,30 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if(PauseController.Instance.IsPaused) return;
+        if(PauseController.Instance.IsPaused | isMoving) return;
 
         if(Input.GetKeyDown(KeyCode.W) && currentPos == 0)
         {
-            transform.position = overheadMarker.position;
-            transform.rotation = overheadMarker.rotation;
+            isMoving = true;
+            StartCoroutine(CameraTween(overheadMarker, .5f));
             currentPos = 1;
         }
         else if(Input.GetKeyDown(KeyCode.S) && currentPos == 1)
         {
-            transform.position = normalMarker.position;
-            transform.rotation = normalMarker.rotation;
+            isMoving = true;
+            StartCoroutine(CameraTween(normalMarker, .5f));
             currentPos = 0;
         }
         else if(Input.GetKeyDown(KeyCode.D) && currentPos == 0)
         {
-            transform.position = sideMarker.position;
-            transform.rotation = sideMarker.rotation;
+            isMoving = true;
+            StartCoroutine(CameraTween(sideMarker, .5f));
             currentPos = 2;
         }
         else if(Input.GetKeyDown(KeyCode.A) && currentPos == 2)
         {
-            transform.position = normalMarker.position;
-            transform.rotation = normalMarker.rotation;
+            isMoving = true;
+            StartCoroutine(CameraTween(normalMarker, .5f));
             currentPos = 0;
         }
 
@@ -182,5 +184,15 @@ public class CameraController : MonoBehaviour
         cardDescription.text = _card.CardDescription;
         cardHealth.text = _card.Health + "/" + _card.MaxHealth;
         cardDamage.text = _card.Damage.ToString();
+    }
+
+    private IEnumerator CameraTween(Transform _pos, float _dur)
+    {
+        Tween _tween = transform.DOMove(_pos.position, _dur);
+        transform.DORotate(_pos.rotation.eulerAngles, _dur);
+
+        yield return _tween.WaitForCompletion();
+        
+        isMoving = false;
     }
 }

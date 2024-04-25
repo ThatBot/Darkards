@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class CardManager : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class CardManager : MonoBehaviour
     }
     #endregion
 
+    #region Variable Definition
     [Header("Gameplay Definitions")]
     [SerializeField] private int handCapacity = 4;
     [SerializeField] private int deckCapacity = 10;
@@ -90,6 +92,8 @@ public class CardManager : MonoBehaviour
 
     private CardObject selectedCard;
     private GameObject selectedCardObject;
+
+    #endregion
 
     private void Start()
     {
@@ -429,11 +433,11 @@ public class CardManager : MonoBehaviour
     public bool AttackCard(int _attackerLane, int _attackerRow, int _defendantLane, int _defendantRow)
     {
         // Prevent attacks to structures when there is a creature in the way
-        if(_defendantRow == 3 || _attackerLane <= 1)
+        if(_defendantRow == 3 && _attackerRow == 1)
         {
             if(GetCardAt(_defendantLane, 2) != null) return false;
         }
-        else if(_defendantRow == 0 || _attackerLane >= 2)
+        else if(_defendantRow == 0 && _attackerRow == 2)
         {
             if(GetCardAt(_defendantLane, 1) != null) return false;
         }
@@ -461,6 +465,11 @@ public class CardManager : MonoBehaviour
         if(_defendant.Behaviour == null) _defendant.Behaviour = new CardBehaviour();
 
         Debug.Log("Attacked creature: " + _defendant.CardName + " with damage: " + _attacker.Damage + " and new health: " + _defendant.Health);
+        
+        GameObject _attackerObj = GetCardHologramAt(_attackerLane, _attackerRow);
+        GameObject _defendantObj = GetCardHologramAt(_defendantLane, _defendantRow);
+
+        StartCoroutine(AttackTween(_attackerObj, _defendantObj));
 
         switch(_defendantRow)
         {
@@ -883,5 +892,50 @@ public class CardManager : MonoBehaviour
         }
 
         return null;
+    }
+
+/// <summary>
+/// Gets the gameobject that represents the card in the specified position on the board
+/// </summary>
+/// <param name="_lane">Card's lane [0-2]</param>
+/// <param name="_row">Card's row, [0-1] for player and [2-3] for rival</param>
+/// <returns>Returns the GameObject of the card in that position, or null if the position is empty</returns>
+    public GameObject GetCardHologramAt(int _lane, int _row)
+    {
+        switch(_row)
+        {
+            case 0:
+                return playerStructureLaneHologramObjects[_lane];
+
+            case 1:
+                return playerLaneHologramObjects[_lane];
+
+            case 2:
+                return rivalLaneHologramObjects[_lane];
+
+            case 3:
+                return rivalStructureLaneHologramObjects[_lane];
+        }
+
+        return null;
+    }
+
+    private IEnumerator AttackTween(GameObject _attacker, GameObject _defendant)
+    {
+        PauseController.Instance.IsPaused = true;
+        Vector3 _originalAttackerPos = _attacker.transform.position;
+        Vector3 _originalAttackerRot = _attacker.transform.rotation.eulerAngles;
+
+        Sequence _attackSequence = DOTween.Sequence();
+        _attackSequence.Append(_attacker.transform.DOLookAt(_defendant.transform.position, .2f));
+        _attackSequence.Append(_attacker.transform.DOMove(_defendant.transform.position, .7f));
+        _attackSequence.Append(_attacker.transform.DOMove(_originalAttackerPos, .7f));
+        _attackSequence.Append(_attacker.transform.DORotate(_originalAttackerRot, .2f));
+
+        _attackSequence.Play();
+
+        yield return _attackSequence.WaitForCompletion();
+        isOnAction = false;
+        PauseController.Instance.IsPaused = false;
     }
 }
