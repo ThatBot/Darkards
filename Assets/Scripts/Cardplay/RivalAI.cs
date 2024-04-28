@@ -84,25 +84,25 @@ public class RivalAI
         }
 
         // If we are more aggressive than defensive, attack
-        if((AggressionTokens > DefensiveTokens || !_hasSpells) && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
+        if((AggressionTokens > DefensiveTokens || !_hasSpells))
         {
             Debug.Log("Aggressive stance, attacking");
             AttackAction();
         }
         // If we are aggressive & defensive, assume a neutral position and draw
-        else if((AggressionTokens == DefensiveTokens && CardManager.Instance.RivalDeck.Count <= 0) && consecutiveDraws < MAX_CONSECUTIVE_DRAWS && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
+        else if(AggressionTokens == DefensiveTokens && CardManager.Instance.RivalDeck.Count <= 0 && consecutiveDraws < MAX_CONSECUTIVE_DRAWS)
         {
             Debug.Log("Neutral stance, drawing");
             DrawAction();
         }
         // If we are more defensive than aggressive, cast spells
-        else if((_hasSpells) && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
+        else if(_hasSpells)
         {
             Debug.Log("Defensive stance, casting");
             PlayAction(false);
         }
         // If there is no other option, draw
-        else if((CardManager.Instance.RivalDeck.Count <= 0) && consecutiveDraws < MAX_CONSECUTIVE_DRAWS && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
+        else if(CardManager.Instance.RivalDeck.Count <= 0)
         {
             Debug.Log("No other option, drawing");
             DrawAction();
@@ -131,32 +131,45 @@ public class RivalAI
         }
 
         int _attacker = _availableAttackLanes[Random.Range(0, _availableAttackLanes.Count)];
-        int _defendant = -1;
-        int _rand = -1;
+        int _defendantRow = -1;
+        int _defendantLane = -1;
 
         // Choose which player lane to attack, taking blockers into consideration
-        while(_defendant != -1)
-        {
-            _rand = Random.Range(0, 2);
+        //while(_defendant != -1)
+        //{
 
-            if(CardManager.Instance.PlayerCreatureLanes[_rand] == null)
+        //    if(CardManager.Instance.PlayerCreatureLanes[_rand] == null)
+        //    {
+        //        if(CardManager.Instance.PlayerStructureLanes[_rand] == null)
+        //        {
+        //            _defendant = -1;
+        //        }
+        //        else
+        //        {
+        //            _defendant = 0;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        _defendant = 1;
+        //    }
+        //}
+
+        for (int i = 0; i < 3; i++)
+        {
+            if(CardManager.Instance.PlayerCreatureLanes[i] != null) 
             {
-                if(CardManager.Instance.PlayerStructureLanes[_rand] == null)
-                {
-                    _defendant = -1;
-                }
-                else
-                {
-                    _defendant = 0;
-                }
+                _defendantRow = 1;
+                _defendantLane = i;
             }
-            else
+            else if(CardManager.Instance.PlayerStructureLanes[i] != null) 
             {
-                _defendant = 1;
+                _defendantRow = 0; 
+                _defendantLane = i;
             }
         }
 
-        CardManager.Instance.AttackCard(_attacker, 2, _rand, _defendant);
+        CardManager.Instance.AttackCard(_attacker, 2, _defendantLane, _defendantRow);
         consecutiveDraws = 0;
     }
 

@@ -31,6 +31,7 @@ public class CardManager : MonoBehaviour
     public int RivalActionsLeft = 3;
     public bool PlayerPriority = true;
     [SerializeField] private CardObject[] tokenCards;
+    public bool InAnimation = false;
 
     [Header("Player Data")]
     public DeckObject PlayerDeckObject;
@@ -457,8 +458,8 @@ public class CardManager : MonoBehaviour
         else 
         {
             ActionsLeft--;
-            rivalAI.AggressionTokens--;
-            rivalAI.DefensiveTokens++;
+            rivalAI.AggressionTokens++;
+            rivalAI.DefensiveTokens--;
         }
 
         // Ensure the card has the base death behaviour
@@ -537,7 +538,6 @@ public class CardManager : MonoBehaviour
 
         }
 
-        if(_attackerRow > 1) isOnAction = false;
         return true;
     }
 
@@ -922,13 +922,14 @@ public class CardManager : MonoBehaviour
 
     private IEnumerator AttackTween(GameObject _attacker, GameObject _defendant)
     {
-        PauseController.Instance.IsPaused = true;
+        InAnimation = true;
         Vector3 _originalAttackerPos = _attacker.transform.position;
         Vector3 _originalAttackerRot = _attacker.transform.rotation.eulerAngles;
 
         Sequence _attackSequence = DOTween.Sequence();
         _attackSequence.Append(_attacker.transform.DOLookAt(_defendant.transform.position, .2f));
         _attackSequence.Append(_attacker.transform.DOMove(_defendant.transform.position, .7f));
+        _attackSequence.AppendCallback(()=>StartCoroutine(DamageTween(_defendant)));    // Lamda required
         _attackSequence.Append(_attacker.transform.DOMove(_originalAttackerPos, .7f));
         _attackSequence.Append(_attacker.transform.DORotate(_originalAttackerRot, .2f));
 
@@ -936,6 +937,17 @@ public class CardManager : MonoBehaviour
 
         yield return _attackSequence.WaitForCompletion();
         isOnAction = false;
-        PauseController.Instance.IsPaused = false;
+        InAnimation = false;
+    }
+
+    private IEnumerator DamageTween(GameObject _obj)
+    {
+        Sequence _damageSequence = DOTween.Sequence();
+        _damageSequence.Append(_obj.transform.DOMove(_obj.transform.position - _obj.transform.forward * .1f, .2f));
+        _damageSequence.Append(_obj.transform.DOMove(_obj.transform.position + _obj.transform.forward * .1f, .2f));
+
+        _damageSequence.Play();
+
+        yield return _damageSequence.WaitForCompletion();
     }
 }

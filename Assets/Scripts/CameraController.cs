@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if(PauseController.Instance.IsPaused | isMoving) return;
+        if(PauseController.Instance.IsPaused | CardManager.Instance.InAnimation | isMoving) return;
 
         if(Input.GetKeyDown(KeyCode.W) && currentPos == 0)
         {
