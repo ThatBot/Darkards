@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: card_zulu
   m_EditorClassIdentifier: 
   CardName: Zulu, Dios de la Muerte
-  CardDescription: Quita 1 punto de vida
+  CardDescription: Quita 1 punto de vida a la carta de la linea
+  CardLore: "Dios venerado por la secta de los Zharr. Maldice a sus oponentes caus\xE1ndoles
+    un da\xF1o terrible."
   Sprite: {fileID: 21300000, guid: 5b2de5265ac8a6d43a1b000a6e2ab677, type: 3}
   Hologram: {fileID: 0}
   Type: 1

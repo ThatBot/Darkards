@@ -13,7 +13,10 @@ MonoBehaviour:
   m_Name: card_fortress
   m_EditorClassIdentifier: 
   CardName: Asedio de Mythril
-  CardDescription: "Aumenta 2 puntos de da\xF1o"
+  CardDescription: "Aumenta 2 de da\xF1o a sus cartas aliadas en su carril, pero
+    este beneficio se aplica solo una vez y no aumenta cada turno."
+  CardLore: "Vestigios de una gran batalla en el castillo de Mythril. A\xFAn se pueden
+    escuchar los gritos de guerra que alientan a los soldados"
   Sprite: {fileID: 21300000, guid: 8675fe0dd65ef634abef2f29f1a64030, type: 3}
   Hologram: {fileID: 919132149155446097, guid: 8355ca5b256f7d447a6c319dde34f2ab, type: 3}
   Type: 2

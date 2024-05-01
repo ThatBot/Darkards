@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: card_catapult
   m_EditorClassIdentifier: 
   CardName: Catapulta de guerra
-  CardDescription: "Inflinge 1 de da\xF1o de ataque"
+  CardDescription: "Inflinge 1 de da\xF1o de ataque al rival en la linea"
+  CardLore: "Restos de la tecnolog\xEDa m\xE1s avanzada usada en la guerra de Irithyll,
+    que sumi\xF3 al continente en una gran crisis, y form\xF3 los reinos actuales."
   Sprite: {fileID: 21300000, guid: 250af8341e505e44a913f5f54e2942e8, type: 3}
   Hologram: {fileID: 919132149155446097, guid: dd26d4ee5f18fcc4794c0b82c0ecbd33, type: 3}
   Type: 2

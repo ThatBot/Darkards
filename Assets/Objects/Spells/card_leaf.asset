@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: card_leaf
   m_EditorClassIdentifier: 
   CardName: Hoja de Helsin
-  CardDescription: Cura 2 puntos de vida
+  CardDescription: Cura 2 puntos de vida a una carta (no se aplica a estructuras)
+  CardLore: "Hoja de las flores m\xE1gicas cultivadas por el druida del c\xEDrculo
+    del pastor Helsin. Se dice que tienen poderes milagrosos."
   Sprite: {fileID: 21300000, guid: a3ccc9ada7717c845852a13495f01919, type: 3}
   Hologram: {fileID: 0}
   Type: 1

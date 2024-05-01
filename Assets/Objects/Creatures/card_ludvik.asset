@@ -14,6 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardName: Ludvik, el Inquisidor
   CardDescription: 
+  CardLore: "El nombre de Ludvik aterra a todas las criaturas del reino. Se dice
+    que una vez fue humano, un sacerdote, que debido a una crisis de fe contact\xF3
+    con otras deidades, las cuales le concedieron el conocimiento absoluto. Sin embargo,
+    a cambio le convirtieron en lo que ahora es, una bestia insaciable. Sus aullidos
+    se oyen por todo el continente, y son augurios de muerte y tragedia."
   Sprite: {fileID: 21300000, guid: 2650ff851ec26f14e9b5c8b2144fc2ed, type: 3}
   Hologram: {fileID: 919132149155446097, guid: 4e8049f77fc989f4192e3c69a28f4797, type: 3}
   Type: 0

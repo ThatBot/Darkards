@@ -23,6 +23,12 @@ public class CardManager : MonoBehaviour
     #endregion
 
     #region Variable Definition
+
+    [Header("Intro Sequence")]
+    [SerializeField] private Animator coinAnimator;
+    [SerializeField] private MeshRenderer coinRenderer;
+    [SerializeField] private Material coinHeadsMaterial;
+    [SerializeField] private Material coinTailsMaterial;
     [Header("Gameplay Definitions")]
     [SerializeField] private int handCapacity = 4;
     [SerializeField] private int deckCapacity = 10;
@@ -50,6 +56,7 @@ public class CardManager : MonoBehaviour
     private bool isOnAction = false;
 
     [Header("Scene References")]
+    [SerializeField] private CameraController camera;
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private GameObject defeatPanel;
 
@@ -161,6 +168,25 @@ public class CardManager : MonoBehaviour
             rivalStructureLaneHologramObjects[i] = Instantiate(_structureCard.Hologram, rivalStructureLaneHologramMarkers[i]);
             _structureCard.Behaviour.Initialize(i, 3);
         }
+
+        float _coinFlip = Random.Range(0, 100);
+        if(_coinFlip >= 50) 
+        {
+            Debug.Log("Heads");
+            List<Material> _mats = new List<Material>();
+            _mats.Add(coinTailsMaterial);
+            _mats.Add(coinHeadsMaterial);
+            coinRenderer.SetMaterials(_mats);
+        }
+        else
+        {
+            Debug.Log("Tails");
+            List<Material> _mats = new List<Material>();
+            _mats.Add(coinHeadsMaterial);
+            _mats.Add(coinTailsMaterial);
+            coinRenderer.SetMaterials(_mats);
+        }
+        coinAnimator.Play("Take 001");
     }
 
     private void Update()
@@ -944,7 +970,7 @@ public class CardManager : MonoBehaviour
     {
         Sequence _damageSequence = DOTween.Sequence();
         _damageSequence.Append(_obj.transform.DOMove(_obj.transform.position - _obj.transform.forward * .1f, .2f));
-        _damageSequence.Append(_obj.transform.DOMove(_obj.transform.position + _obj.transform.forward * .1f, .2f));
+        _damageSequence.Append(_obj.transform.DOLocalMove(Vector3.zero, .2f));
 
         _damageSequence.Play();
 

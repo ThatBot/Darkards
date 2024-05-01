@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardName: "Corrupci\xF3n de Flynch"
   CardDescription: "Inflinge +1 de da\xF1o por turno a la carta afectada"
+  CardLore: "Una de las \xFAltimas creaciones de Flynch, el alquimista orco m\xE1s
+    repudiado del reino. Su obsesi\xF3n por crear los experimentos m\xE1s m\xF3rbidos
+    y desagradables le llev\xF3 al destierro, pero no hizo que cesaran sus ansias.
+    Ahora vaga entre los reinos buscando sujetos de prueba."
   Sprite: {fileID: 21300000, guid: 47d8f888d2f3c9844aae764d0720c877, type: 3}
   Hologram: {fileID: 0}
   Type: 1

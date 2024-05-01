@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: card_banner
   m_EditorClassIdentifier: 
   CardName: Estandarte del Sol
-  CardDescription: "Protege a la criatura de la siguiente fuente de da\xF1o"
+  CardDescription: "Protege a la criatura de cualquier ataque/hechizo que se le trate
+    de aplicar en una sola acci\xF3n."
+  CardLore: "Escudo portado por el l\xEDder de la orden de los Centinelas del Sol,
+    ej\xE9rcito temido por su gran disciplina y devoci\xF3n hacia la Deidad Solar.
+    Conced\xEDa a los soldados cualidades sobrehumanas en el campo de batalla."
   Sprite: {fileID: 21300000, guid: cc9d6452cb834f94e9ef0de19c804c21, type: 3}
   Hologram: {fileID: 0}
   Type: 1

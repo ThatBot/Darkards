@@ -8,6 +8,18 @@ using DG.Tweening;
 
 public class CameraController : MonoBehaviour
 {
+    #region Singleton
+
+    public static CameraController Instance;
+
+    void Awake()
+    {
+        if(Instance != null) Destroy(gameObject);
+        else Instance = this;
+    }
+
+    #endregion
+
     [Header("Camera Movement")]
     [SerializeField] private Transform normalMarker;
     [SerializeField] private Transform overheadMarker;
@@ -26,10 +38,11 @@ public class CameraController : MonoBehaviour
     private int selectedTokenRow = -1;
 
     private int currentPos = 0; // 0 -> Normal | 1 -> Overhead | 2 -> Side
+    private bool onIntro = true;
 
     void Update()
     {
-        if(PauseController.Instance.IsPaused | CardManager.Instance.InAnimation | isMoving) return;
+        if(PauseController.Instance.IsPaused | CardManager.Instance.InAnimation | isMoving | onIntro) return;
 
         if(Input.GetKeyDown(KeyCode.W) && currentPos == 0)
         {
@@ -194,5 +207,15 @@ public class CameraController : MonoBehaviour
         yield return _tween.WaitForCompletion();
         
         isMoving = false;
+    }
+
+    public IEnumerator GoToStartPos()
+    {
+        Tween _tween = transform.DOMove(normalMarker.position, 0.5f);
+        transform.DORotate(normalMarker.rotation.eulerAngles, 0.5f);
+
+        yield return _tween.WaitForCompletion();
+
+        onIntro = false;
     }
 }
