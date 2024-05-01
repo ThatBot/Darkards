@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: card_skeleton
   m_EditorClassIdentifier: 
   CardName: Esqueleto
-  CardDescription: Esqueleto creado por el Cementerio
+  CardDescription: 
   Sprite: {fileID: 21300000, guid: b93b22df3ae6e59489754bc32f9e3559, type: 3}
   Hologram: {fileID: 919132149155446097, guid: ff72bb9670d7cfc4ba88600501c90b65, type: 3}
   Type: 0

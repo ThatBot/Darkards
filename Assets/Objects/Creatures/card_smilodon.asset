@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: card_smilodon
   m_EditorClassIdentifier: 
   CardName: Smilodon
+  CardDescription: 
   Sprite: {fileID: 21300000, guid: d25719dd9266cb04cba3e9b9d47b5bb2, type: 3}
   Hologram: {fileID: 919132149155446097, guid: 61fa63f4045575144998267806501716, type: 3}
   Type: 0

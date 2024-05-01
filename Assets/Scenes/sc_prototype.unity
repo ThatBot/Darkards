@@ -5717,6 +5717,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: mesh_tablero
       objectReference: {fileID: 0}
+    - target: {fileID: 5013108877556995693, guid: a43c081fb6746cc4dbbf63ca5a80d90b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0b5876e8df22dbe4dbd394bff175e577, type: 2}
     - target: {fileID: 5877350887749998351, guid: a43c081fb6746cc4dbbf63ca5a80d90b,
         type: 3}
       propertyPath: m_IsActive
@@ -21289,6 +21294,7 @@ MonoBehaviour:
   PlayerPriority: 1
   tokenCards:
   - {fileID: 11400000, guid: fc0eda83c460d7749ad1606cd117d366, type: 2}
+  InAnimation: 0
   PlayerDeckObject: {fileID: 11400000, guid: 1bf484524a9a4964aaeb29cd6e69ed8c, type: 2}
   PlayerHand: []
   PlayerDeck: []

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: card_shapeshifter
   m_EditorClassIdentifier: 
   CardName: Cambiaformas
+  CardDescription: 
   Sprite: {fileID: 21300000, guid: 61b4356ee1f10b744a5d2623279c745c, type: 3}
   Hologram: {fileID: 919132149155446097, guid: 7cc478356bf21834b8f13527a3a656d8, type: 3}
   Type: 0
