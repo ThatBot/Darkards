@@ -9,6 +9,8 @@ public class CorruptionCardBehaviour : CardBehaviour
         if(CardManager.Instance.GetCardAt(lane, row) != null) 
             CardManager.Instance.GetCardAt(lane, row).Poisoned = true;
 
+        if (row <= 2) FlaskController.Instance.ChangeColor(new Color(0.0f, 1.0f, 0.2f));
+
         base.OnCastEffect();
     }
 }

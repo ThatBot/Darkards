@@ -2,11 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.Audio;
 
 public class MainMenuController : MonoBehaviour
 {
+    [Header("Volume")]
+    [SerializeField] private AudioMixer mainMixer;
+    [SerializeField] private Slider masterSlider;
+    [SerializeField] private Slider musicSlider;
+    [SerializeField] private Slider effectsSlider;
+
     [Header("Glossary")]
     [SerializeField] private GameObject descriptionModal;
     [SerializeField] private TMP_Text damageText;
@@ -14,6 +22,20 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private TMP_Text nameText;
     [SerializeField] private TMP_Text descriptionText;
     [SerializeField] private TMP_Text loreText;
+
+    public void Start()
+    {
+        // Populate the sliders with the appropiate values
+        float _vol;
+        mainMixer.GetFloat("master_vol", out _vol);
+        masterSlider.value = _vol;
+
+        mainMixer.GetFloat("music_vol", out _vol);
+        musicSlider.value = _vol;
+
+        mainMixer.GetFloat("effects_vol", out _vol);
+        effectsSlider.value = _vol;
+    }
 
     public void OnPlayPressed()
     {
@@ -33,6 +55,21 @@ public class MainMenuController : MonoBehaviour
     public void OnSettingsBackPressed()
     {
         
+    }
+
+    public void SetMainVolume(float _vol)
+    {
+        mainMixer.SetFloat("master_vol", _vol);
+    }
+
+    public void SetMusicVolume(float _vol)
+    {
+        mainMixer.SetFloat("music_vol", _vol);
+    }
+
+    public void SetEffectsVolume(float _vol)
+    {
+        mainMixer.SetFloat("sfx_vol", _vol);
     }
 
     public void SetCardLore(CardObject _card)

@@ -8,6 +8,8 @@ public class ZuluCardBehaviour : CardBehaviour
     {
         CardManager.Instance.DamageCard(lane, row, 1);
 
+        if (row <= 2) FlaskController.Instance.ChangeColor(new Color(0.0f, 0.0f, 0.0f));
+
         base.OnCastEffect();
     }
 }

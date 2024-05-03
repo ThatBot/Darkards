@@ -56,7 +56,7 @@ public class CardManager : MonoBehaviour
     private bool isOnAction = false;
 
     [Header("Scene References")]
-    [SerializeField] private CameraController camera;
+    [SerializeField] private CameraController cameraCont;
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private GameObject defeatPanel;
 
@@ -289,7 +289,63 @@ public class CardManager : MonoBehaviour
         }
     }
 
+    #region Deck Management
 /// <summary>
+/// Adds a card to a deck
+/// </summary>
+/// <param name="_player">Set to true if the player is the one taking the action</param>
+/// <param name="_card">Card to add into the deck</param>
+/// <returns>Returns true if the card was added, returns false if the deck is full</returns>
+    public bool AddCardToDeck(bool _player, CardObject _card)
+    {
+        if(_player && PlayerDeck.Count >= deckCapacity) return false;
+        else if(!_player && RivalDeck.Count >= deckCapacity) return false;
+
+        if(_player) PlayerDeck.Add(_card);
+        else RivalDeck.Add(_card);
+
+        return true;
+    }
+
+/// <summary>
+/// Removes a card from a hand
+/// </summary>
+/// <param name="_player">Set to true if the player is the one taking the action</param>
+/// <param name="_card">Card to remove from the deck</param>
+/// <returns>Returns true if the card was removed, returns false if the card was not found in the hand</returns>
+    public bool RemoveCard(bool _player, CardObject _card)
+    {
+        if(_player)
+        {
+            for (int i = 0; i < PlayerHand.Count; i++)
+            {
+                if(PlayerHand[i].GetComponentInChildren<CardInstance>().Card == _card)
+                {
+                    Destroy(PlayerHand[i]);
+                    PlayerHand.RemoveAt(i);
+
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < RivalHand.Count; i++)
+            {
+                if(RivalHand[i] == _card)
+                {
+                    RivalHand.RemoveAt(i);
+
+                    return true;
+                }
+            }
+        }
+
+        // If the card was not present on the hand, return false to notify
+        return false;
+    }
+
+    /// <summary>
 /// Draws a card and consumes an action
 /// </summary>
 /// <param name="_player">Set to true if the player is the one taking the action</param>
@@ -370,62 +426,6 @@ public class CardManager : MonoBehaviour
         }
 
         // If not enough capacity, return false to notify
-        return false;
-    }
-
-    #region Deck Management
-/// <summary>
-/// Adds a card to a deck
-/// </summary>
-/// <param name="_player">Set to true if the player is the one taking the action</param>
-/// <param name="_card">Card to add into the deck</param>
-/// <returns>Returns true if the card was added, returns false if the deck is full</returns>
-    public bool AddCardToDeck(bool _player, CardObject _card)
-    {
-        if(_player && PlayerDeck.Count >= deckCapacity) return false;
-        else if(!_player && RivalDeck.Count >= deckCapacity) return false;
-
-        if(_player) PlayerDeck.Add(_card);
-        else RivalDeck.Add(_card);
-
-        return true;
-    }
-
-/// <summary>
-/// Removes a card from a hand
-/// </summary>
-/// <param name="_player">Set to true if the player is the one taking the action</param>
-/// <param name="_card">Card to remove from the deck</param>
-/// <returns>Returns true if the card was removed, returns false if the card was not found in the hand</returns>
-    public bool RemoveCard(bool _player, CardObject _card)
-    {
-        if(_player)
-        {
-            for (int i = 0; i < PlayerHand.Count; i++)
-            {
-                if(PlayerHand[i].GetComponentInChildren<CardInstance>().Card == _card)
-                {
-                    Destroy(PlayerHand[i]);
-                    PlayerHand.RemoveAt(i);
-
-                    return true;
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < RivalHand.Count; i++)
-            {
-                if(RivalHand[i] == _card)
-                {
-                    RivalHand.RemoveAt(i);
-
-                    return true;
-                }
-            }
-        }
-
-        // If the card was not present on the hand, return false to notify
         return false;
     }
 
@@ -946,6 +946,8 @@ public class CardManager : MonoBehaviour
         return null;
     }
 
+    #region Tweens
+
     private IEnumerator AttackTween(GameObject _attacker, GameObject _defendant)
     {
         InAnimation = true;
@@ -976,4 +978,6 @@ public class CardManager : MonoBehaviour
 
         yield return _damageSequence.WaitForCompletion();
     }
+    
+    #endregion
 }
