@@ -3,9 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class DataManager : MonoBehaviour
 {
+    #region Singleton Definition
+    public static DataManager Instance;
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    #endregion
+
+    private int coins = 100;
     [SerializeField] private Slider master;
     [SerializeField] private Slider musica;
     [SerializeField] private Slider efectos;
@@ -77,5 +94,11 @@ public class DataManager : MonoBehaviour
     {
         PlayerPrefs.DeleteAll();
         LoadSettings();
+    }
+
+    public void addCoins(int monedas)
+    {
+        Debug.Log("Se han sumado: " + monedas);
+        coins += monedas;
     }
 }

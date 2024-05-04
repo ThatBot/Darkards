@@ -213,12 +213,16 @@ public class CardManager : MonoBehaviour
         if(_rivalLost)
         {
             PlayerPriority = true;
+            DataManager.Instance.addCoins(500);
             victoryPanel.SetActive(true);
+            
         }
         else if(_playerLost)
         {
             PlayerPriority = true;
+            DataManager.Instance.addCoins(250);
             defeatPanel.SetActive(true);
+            
         }
     }
 
