@@ -24,11 +24,6 @@ public class CardManager : MonoBehaviour
 
     #region Variable Definition
 
-    [Header("Intro Sequence")]
-    [SerializeField] private Animator coinAnimator;
-    [SerializeField] private MeshRenderer coinRenderer;
-    [SerializeField] private Material coinHeadsMaterial;
-    [SerializeField] private Material coinTailsMaterial;
     [Header("Gameplay Definitions")]
     [SerializeField] private int handCapacity = 4;
     [SerializeField] private int deckCapacity = 10;
@@ -101,9 +96,35 @@ public class CardManager : MonoBehaviour
     private CardObject selectedCard;
     private GameObject selectedCardObject;
 
+    private bool onIntro = true;
+
     #endregion
 
     private void Start()
+    {
+        IntroController.Instance.InitiateIntro();
+    }
+
+    private void Update()
+    {
+        if(onIntro) return;
+
+        HandleWinCondition();
+
+        // Switch turns when actions run out
+        if(ActionsLeft <= 0 || RivalActionsLeft <= 0) 
+        {
+            SwitchTurn();
+            return;
+        }
+        else if (RivalActionsLeft > 0 && !PlayerPriority && !isOnAction) 
+        {
+            isOnAction = true;
+            rivalAI.ProcessAction();
+        }
+    }
+
+    public void PopulateField()
     {
         // Populate the decks for both the player and rival
         int _rand = Random.Range(0, AvailableDecks.Length);
@@ -128,7 +149,7 @@ public class CardManager : MonoBehaviour
         DrawFreeCard(false);
 
         // Populate the player's structure area
-        for (int i = 0; i < AvailableDecks[_rand].Structures.Count; i++)
+        for (int i = 0; i < PlayerDeckObject.Structures.Count; i++)
         {
             CardObject _structureCard = PlayerDeckObject.Structures[i];
 
@@ -169,41 +190,8 @@ public class CardManager : MonoBehaviour
             _structureCard.Behaviour.Initialize(i, 3);
         }
 
-        float _coinFlip = Random.Range(0, 100);
-        if(_coinFlip >= 50) 
-        {
-            Debug.Log("Heads");
-            List<Material> _mats = new List<Material>();
-            _mats.Add(coinTailsMaterial);
-            _mats.Add(coinHeadsMaterial);
-            coinRenderer.SetMaterials(_mats);
-        }
-        else
-        {
-            Debug.Log("Tails");
-            List<Material> _mats = new List<Material>();
-            _mats.Add(coinHeadsMaterial);
-            _mats.Add(coinTailsMaterial);
-            coinRenderer.SetMaterials(_mats);
-        }
-        coinAnimator.Play("Take 001");
-    }
-
-    private void Update()
-    {
-        HandleWinCondition();
-
-        // Switch turns when actions run out
-        if(ActionsLeft <= 0 || RivalActionsLeft <= 0) 
-        {
-            SwitchTurn();
-            return;
-        }
-        else if (RivalActionsLeft > 0 && !PlayerPriority && !isOnAction) 
-        {
-            isOnAction = true;
-            rivalAI.ProcessAction();
-        }
+        onIntro = false;
+        CameraController.Instance.OnIntro = false;
     }
 
     private void HandleWinCondition()

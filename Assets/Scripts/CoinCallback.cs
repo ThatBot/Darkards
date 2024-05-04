@@ -20,6 +20,7 @@ public class CoinCallback : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         CameraController.Instance.StartCoroutine(CameraController.Instance.GoToStartPos());
+        IntroController.Instance.SelectStructure();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

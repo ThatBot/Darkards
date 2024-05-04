@@ -25,6 +25,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Transform overheadMarker;
     [SerializeField] private Transform sideMarker;
     private bool isMoving = false;
+    [Header("Intro Sequence")]
+    [SerializeField] private GameObject structureChoicePanel;
 
     [Header("Card UI")]
     [SerializeField] private GameObject cardStatusObj;
@@ -38,11 +40,11 @@ public class CameraController : MonoBehaviour
     private int selectedTokenRow = -1;
 
     private int currentPos = 0; // 0 -> Normal | 1 -> Overhead | 2 -> Side
-    private bool onIntro = true;
+    public bool OnIntro = true;
 
     void Update()
     {
-        if(PauseController.Instance.IsPaused | CardManager.Instance.InAnimation | isMoving | onIntro) return;
+        if(PauseController.Instance.IsPaused | CardManager.Instance.InAnimation | isMoving | OnIntro) return;
 
         if(Input.GetKeyDown(KeyCode.W) && currentPos == 0)
         {
@@ -216,6 +218,6 @@ public class CameraController : MonoBehaviour
 
         yield return _tween.WaitForCompletion();
 
-        onIntro = false;
+        OnIntro = false;
     }
 }

@@ -15862,7 +15862,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 1000}
   m_SizeDelta: {x: 1400, y: 900}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &253159191
@@ -16189,7 +16189,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 309257393}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559819462}
+        m_TargetAssemblyTypeName: StructureControlUI, Assembly-CSharp
+        m_MethodName: SelectLane
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &309257393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16502,12 +16514,14 @@ MonoBehaviour:
   normalMarker: {fileID: 855055652}
   overheadMarker: {fileID: 1456938787}
   sideMarker: {fileID: 2063088732}
+  structureChoicePanel: {fileID: 0}
   cardStatusObj: {fileID: 42328138}
   cardSprite: {fileID: 2089642918}
   cardName: {fileID: 728822357}
   cardDescription: {fileID: 1538278637}
   cardHealth: {fileID: 97245412}
   cardDamage: {fileID: 1906004184}
+  OnIntro: 1
 --- !u!1 &399447522
 GameObject:
   m_ObjectHideFlags: 0
@@ -21657,10 +21671,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5eb5aa34b2538c4ca8676f0067609c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coinAnimator: {fileID: 1301278105}
-  coinRenderer: {fileID: 1711813854770327826}
-  coinHeadsMaterial: {fileID: 2100000, guid: 00e764596aa41114195e3c4ea928bc92, type: 2}
-  coinTailsMaterial: {fileID: 2100000, guid: b336ff598a9ba614c9cf461cdce7d8c7, type: 2}
   handCapacity: 4
   deckCapacity: 10
   actionCapacity: 3
@@ -21693,7 +21703,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  camera: {fileID: 0}
+  cameraCont: {fileID: 0}
   victoryPanel: {fileID: 760183321}
   defeatPanel: {fileID: 174569557}
   playerHandTransform: {fileID: 2001936097}
@@ -21918,7 +21928,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 551900104}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559819462}
+        m_TargetAssemblyTypeName: StructureControlUI, Assembly-CSharp
+        m_MethodName: SelectCard
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &551900104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22022,6 +22044,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerDeck: {fileID: 11400000, guid: 1bf484524a9a4964aaeb29cd6e69ed8c, type: 2}
+  availableStructures:
+  - {fileID: 11400000, guid: 42cf696f7cdad6c4dbaec63f7caaa7cd, type: 2}
+  - {fileID: 11400000, guid: cce78a054647bf74394eefff3a44c761, type: 2}
+  - {fileID: 11400000, guid: 79b95d54eee5dea4e9e0ff167e90d942, type: 2}
+  - {fileID: 11400000, guid: 7b51b96645c92fd4a8fd72e598d17cc2, type: 2}
+  backTransform: {fileID: 253159190}
+  laneButtons:
+  - {fileID: 1371181835}
+  - {fileID: 1664980291}
+  - {fileID: 309257392}
 --- !u!1 &580281037
 GameObject:
   m_ObjectHideFlags: 0
@@ -37204,7 +37236,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 858158404}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559819462}
+        m_TargetAssemblyTypeName: StructureControlUI, Assembly-CSharp
+        m_MethodName: SelectCard
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &858158404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46996,7 +47040,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 927033288}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559819462}
+        m_TargetAssemblyTypeName: StructureControlUI, Assembly-CSharp
+        m_MethodName: SelectCard
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &927033288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62961,6 +63017,55 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.25
   axis: {x: 0, y: 0, z: 1}
+--- !u!1 &1298797342
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1298797344}
+  - component: {fileID: 1298797343}
+  m_Layer: 0
+  m_Name: Intro Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1298797343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298797342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 376dc75b90836ba4bb3f0da834b97cd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coinAnimator: {fileID: 1301278105}
+  coinRenderer: {fileID: 1711813854770327826}
+  coinHeadsMaterial: {fileID: 2100000, guid: 00e764596aa41114195e3c4ea928bc92, type: 2}
+  coinTailsMaterial: {fileID: 2100000, guid: b336ff598a9ba614c9cf461cdce7d8c7, type: 2}
+  structureSelector: {fileID: 559819460}
+--- !u!4 &1298797344
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298797342}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1301278105
 Animator:
   serializedVersion: 5
@@ -63195,7 +63300,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1371181836}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559819462}
+        m_TargetAssemblyTypeName: StructureControlUI, Assembly-CSharp
+        m_MethodName: SelectLane
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1371181836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63316,7 +63433,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1381458076}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559819462}
+        m_TargetAssemblyTypeName: StructureControlUI, Assembly-CSharp
+        m_MethodName: SelectCard
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1381458076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68942,7 +69071,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1664980292}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559819462}
+        m_TargetAssemblyTypeName: StructureControlUI, Assembly-CSharp
+        m_MethodName: SelectLane
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1664980292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84356,7 +84497,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1937194336}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 559819462}
+        m_TargetAssemblyTypeName: StructureControlUI, Assembly-CSharp
+        m_MethodName: OnDone
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1937194336
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94841,4 +94994,5 @@ SceneRoots:
   - {fileID: 535431723}
   - {fileID: 832575519}
   - {fileID: 546961881}
+  - {fileID: 1298797344}
   - {fileID: 1097053764}
