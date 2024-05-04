@@ -8,23 +8,23 @@ public class ShapeshifterCardBehaviour : CardBehaviour
 
     public override void OnCastEffect()
     {
-        Shift();
+        Shift(lane, row);
 
         base.OnCastEffect();
     }
 
-    public override void OnTurnEffect()
+    public override void OnTurnEffect(int _lane, int _row)
     {
-        Shift();
+        Shift(_lane, _row);
 
-        base.OnTurnEffect();
+        base.OnTurnEffect(_lane, _row);
     }
 
-    private void Shift()
+    private void Shift(int _lane, int _row)
     {
-        CardObject _shifterObj = CardManager.Instance.GetCardAt(lane, 1);
+        CardObject _shifterObj = CardManager.Instance.GetCardAt(_lane, 1);
 
-        if(CardManager.Instance.RivalCreatureLanes[lane] == null)
+        if(CardManager.Instance.RivalCreatureLanes[_lane] == null)
         {
             _shifterObj.Health = 1;
             _shifterObj.MaxHealth = 1;
@@ -35,7 +35,7 @@ public class ShapeshifterCardBehaviour : CardBehaviour
             return;
         }
 
-        CardObject _otherObj = CardManager.Instance.GetCardAt(lane, 2);
+        CardObject _otherObj = CardManager.Instance.GetCardAt(_lane, 2);
 
         _shifterObj.Health = _otherObj.Health;
         _shifterObj.MaxHealth = _otherObj.MaxHealth;

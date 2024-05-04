@@ -166,7 +166,7 @@ public class CardManager : MonoBehaviour
 
             // Spawn the card's model on the correct spot
             playerStructureLaneHologramObjects[i] = Instantiate(_structureCard.Hologram, playerStructureLaneHologramMarkers[i]);
-            _structureCard.Behaviour.Initialize(i, 0);
+            _cardClone.Behaviour.Initialize(i, 0);
         }
 
         // Populate the rival's structure area
@@ -187,7 +187,7 @@ public class CardManager : MonoBehaviour
 
             // Spawn the card's model on the correct spot
             rivalStructureLaneHologramObjects[i] = Instantiate(_structureCard.Hologram, rivalStructureLaneHologramMarkers[i]);
-            _structureCard.Behaviour.Initialize(i, 3);
+            _cardClone.Behaviour.Initialize(i, 3);
         }
 
         onIntro = false;
@@ -239,14 +239,14 @@ public class CardManager : MonoBehaviour
             {
                 if(RivalCreatureLanes[i] != null) 
                 {
-                    RivalCreatureLanes[i].Behaviour?.OnTurnEffect();
+                    RivalCreatureLanes[i].Behaviour?.OnTurnEffect(i, 2);
                     if(RivalCreatureLanes[i].Poisoned) DamageCard(i, 2, 1);
                 }
             }
 
             for (int i = 0; i < RivalStructureLanes.Length; i++)
             {
-                if(RivalStructureLanes[i] != null) RivalStructureLanes[i].Behaviour?.OnTurnEffect();
+                if(RivalStructureLanes[i] != null) RivalStructureLanes[i].Behaviour?.OnTurnEffect(i, 3);
             }
 
             playerHandTransform.gameObject.SetActive(false);
@@ -263,14 +263,18 @@ public class CardManager : MonoBehaviour
             {
                 if(PlayerCreatureLanes[i] != null) 
                 {
-                    PlayerCreatureLanes[i].Behaviour?.OnTurnEffect();
+                    PlayerCreatureLanes[i].Behaviour?.OnTurnEffect(i, 1);
                     if(PlayerCreatureLanes[i].Poisoned) DamageCard(i, 1, 1);
                 }
             }
 
             for (int i = 0; i < PlayerStructureLanes.Length; i++)
             {
-                if(PlayerStructureLanes[i] != null) PlayerStructureLanes[i].Behaviour?.OnTurnEffect();
+                if(PlayerStructureLanes[i] != null) 
+                {
+                    Debug.Log("Called structure onTurn at lane: " + i);
+                    PlayerStructureLanes[i].Behaviour.OnTurnEffect(i, 0);
+                }
             }
 
             playerHandTransform.gameObject.SetActive(true);

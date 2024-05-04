@@ -27,6 +27,7 @@ public class RivalAI
         }
 
         bool _fieldFull = true;
+        bool _hasAttackers = false;
         bool _playerFieldFull = true;
         bool _hasCreatures = false;
         bool _hasSpells = false;
@@ -36,6 +37,7 @@ public class RivalAI
         for (int i = 0; i < CardManager.Instance.RivalCreatureLanes.Length; i++)
         {
             if(CardManager.Instance.RivalCreatureLanes[i] == null) _fieldFull = false;
+            if(CardManager.Instance.RivalCreatureLanes[i] != null) _hasAttackers = true;
         }
         
         // Check if the player's creature field is full
@@ -84,7 +86,7 @@ public class RivalAI
         }
 
         // If we are more aggressive than defensive, attack
-        if((AggressionTokens > DefensiveTokens || !_hasSpells))
+        if((AggressionTokens > DefensiveTokens || !_hasSpells) && _hasAttackers)
         {
             Debug.Log("Aggressive stance, attacking");
             AttackAction();

@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class CatapultCardBehaviour : CardBehaviour
 {
-    public override void OnTurnEffect()
+    public override void OnTurnEffect(int _lane, int _row)
     {
         // Damage card depending on which side of the board the structure is at
-        if(CardManager.Instance.GetCardAt(lane,2) != null)
+        if(CardManager.Instance.GetCardAt(_lane,2) != null)
         {
-            CardManager.Instance.DamageCard(lane, 2, 1);
+            CardManager.Instance.DamageCard(_lane, 2, 1);
         }
-        else if(CardManager.Instance.GetCardAt(lane,3) != null)
+        else if(CardManager.Instance.GetCardAt(_lane,3) != null)
         {
-            CardManager.Instance.DamageCard(lane, 3, 1);
+            CardManager.Instance.DamageCard(_lane, 3, 1);
         }
 
-        base.OnTurnEffect();
+        base.OnTurnEffect(_lane, _row);
     }
 }

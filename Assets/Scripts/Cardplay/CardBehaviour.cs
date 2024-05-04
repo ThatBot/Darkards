@@ -16,7 +16,7 @@ public class CardBehaviour : MonoBehaviour
     {
         lane = _lane;
         row = _row;
-
+        
         OnCastEffect();
     }
 
@@ -39,9 +39,9 @@ public class CardBehaviour : MonoBehaviour
 /// <summary>
 /// Event triggered when turns switch (priority rotates)
 /// </summary>
-    public virtual void OnTurnEffect()
+    public virtual void OnTurnEffect(int _lane, int _row)
     {
-
+        
     }
 
 /// <summary>
