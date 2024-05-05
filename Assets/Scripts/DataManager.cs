@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +24,7 @@ public class DataManager : MonoBehaviour
     #endregion
 
     private int colorblindnessType = 0;
-    private int coins = 0;
+    public int coins = 0;
     private int victorias = 0;
     private int derrotas = 0;
     private int partidas = 0;
@@ -115,6 +116,16 @@ public class DataManager : MonoBehaviour
             partidas = defaultPartidas;
             PlayerPrefs.SetInt("Partidas", defaultPartidas);
         }
+        if (PlayerPrefs.HasKey("coins"))
+        {
+            coins = PlayerPrefs.GetInt("coins");
+        }
+        else
+        {
+            coins = 0;
+            PlayerPrefs.SetInt("coins", 0);
+        }
+
     }
 
     // Update is called once per frame
@@ -172,5 +183,9 @@ public class DataManager : MonoBehaviour
     {
         partidas = victorias + derrotas;
         PlayerPrefs.SetInt("PartidasTotales", partidas);
+    }
+    public void SaveCoins()
+    {
+        PlayerPrefs.SetInt("coins", coins);
     }
 }
