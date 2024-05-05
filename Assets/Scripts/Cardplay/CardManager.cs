@@ -98,12 +98,13 @@ public class CardManager : MonoBehaviour
 
     private bool onIntro = true;
     private bool coinsAdded = false;
+    private int startingPlayer = 0;
 
     #endregion
 
     private void Start()
     {
-        IntroController.Instance.InitiateIntro();
+        startingPlayer = IntroController.Instance.InitiateIntro();
     }
 
     private void Update()
@@ -194,6 +195,8 @@ public class CardManager : MonoBehaviour
         onIntro = false;
         coinsAdded = false;
         CameraController.Instance.OnIntro = false;
+
+        if(startingPlayer == 1) SwitchTurn();
     }
 
     private void HandleWinCondition()
