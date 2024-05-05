@@ -30,7 +30,6 @@ public class DataManager : MonoBehaviour
     [SerializeField] private float defaultMasterVolume = 1f;
     [SerializeField] private float defaultMusicVolume = 1f;
     [SerializeField] private float defaultEffectsVolume = 1f;
-    // Start is called before the first frame update
 
     void Start()
     {
@@ -68,12 +67,6 @@ public class DataManager : MonoBehaviour
             efectos.value = defaultEffectsVolume;
             PlayerPrefs.SetFloat("Effects", defaultEffectsVolume);
         }  
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void SetMasterVolume()

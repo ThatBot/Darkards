@@ -15,6 +15,9 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private Slider musicSlider;
     [SerializeField] private Slider effectsSlider;
 
+    [Header("Colorblindness")]
+    [SerializeField] private Material colorblindnessMat;
+
     [Header("Glossary")]
     [SerializeField] private GameObject descriptionModal;
     [SerializeField] private TMP_Text damageText;
@@ -75,6 +78,11 @@ public class MainMenuController : MonoBehaviour
     public void SetEffectsVolume(float _vol)
     {
         mainMixer.SetFloat("sfx_vol", _vol);
+    }
+
+    public void SetColorblindnessType(int _type)
+    {
+        colorblindnessMat.SetFloat("_Type", _type);
     }
 
     public void SetCardLore(CardObject _card)
