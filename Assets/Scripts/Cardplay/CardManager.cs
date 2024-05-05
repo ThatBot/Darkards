@@ -97,6 +97,7 @@ public class CardManager : MonoBehaviour
     private GameObject selectedCardObject;
 
     private bool onIntro = true;
+    private bool coinsAdded = false;
 
     #endregion
 
@@ -191,6 +192,7 @@ public class CardManager : MonoBehaviour
         }
 
         onIntro = false;
+        coinsAdded = false;
         CameraController.Instance.OnIntro = false;
     }
 
@@ -213,14 +215,16 @@ public class CardManager : MonoBehaviour
         if(_rivalLost)
         {
             PlayerPriority = true;
-            DataManager.Instance.addCoins(500);
+            if(!coinsAdded) DataManager.Instance.addCoins(500);
+            coinsAdded = true;
             victoryPanel.SetActive(true);
             
         }
         else if(_playerLost)
         {
             PlayerPriority = true;
-            DataManager.Instance.addCoins(250);
+            if(!coinsAdded) DataManager.Instance.addCoins(250);
+            coinsAdded = true;
             defeatPanel.SetActive(true);
             
         }
@@ -256,6 +260,7 @@ public class CardManager : MonoBehaviour
             playerHandTransform.gameObject.SetActive(false);
 
             isOnAction = true;
+            rivalAI.InitializeTurn();
             rivalAI.ProcessAction();
         }
         else // The rival has priority, switch to player
@@ -276,7 +281,6 @@ public class CardManager : MonoBehaviour
             {
                 if(PlayerStructureLanes[i] != null) 
                 {
-                    Debug.Log("Called structure onTurn at lane: " + i);
                     PlayerStructureLanes[i].Behaviour.OnTurnEffect(i, 0);
                 }
             }

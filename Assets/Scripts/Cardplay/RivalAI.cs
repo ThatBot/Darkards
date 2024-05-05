@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum AIAction
+{
+    None = -1,
+    Attack = 1,
+    Draw = 2,
+    Play = 3
+}
+
 public class RivalAI
 {
     public int AggressionTokens;
@@ -12,6 +20,13 @@ public class RivalAI
     private int consecutiveActions = 0;
     private int lastActionIndex = -1;
     private const int MAX_CONSECUTIVE_ACTIONS = 3;
+
+    public void InitializeTurn()
+    {
+        consecutiveActions = 0;
+        consecutiveDraws = 0;
+        lastActionIndex = (int)AIAction.None;
+    }
 
     public void ProcessAction()
     {
@@ -86,7 +101,7 @@ public class RivalAI
         }
 
         // If we are more aggressive than defensive, attack
-        if((AggressionTokens > DefensiveTokens || !_hasSpells) && _hasAttackers)
+        if((AggressionTokens > DefensiveTokens || !_hasSpells) && (consecutiveActions < MAX_CONSECUTIVE_ACTIONS && lastActionIndex != (int)AIAction.Attack) && _hasAttackers)
         {
             Debug.Log("Aggressive stance, attacking");
             AttackAction();
@@ -98,7 +113,7 @@ public class RivalAI
             DrawAction();
         }
         // If we are more defensive than aggressive, cast spells
-        else if(_hasSpells)
+        else if(_hasSpells && (consecutiveActions < MAX_CONSECUTIVE_ACTIONS && lastActionIndex != (int)AIAction.Play))
         {
             Debug.Log("Defensive stance, casting");
             PlayAction(false);
@@ -121,7 +136,7 @@ public class RivalAI
         // Check we haven't attacked yet, otherwise increment the counter
         if(lastActionIndex == 1) consecutiveActions++;
         else consecutiveActions = 0;
-        lastActionIndex = 1;
+        lastActionIndex = (int)AIAction.Attack;
 
         List<int> _availableAttackLanes = new List<int>();
 
@@ -180,7 +195,7 @@ public class RivalAI
         // Check we haven't drawn yet, otherwise increment the counter
         if(lastActionIndex == 2) consecutiveActions++;
         else consecutiveActions = 0;
-        lastActionIndex = 2;
+        lastActionIndex = (int)AIAction.Draw;
 
         consecutiveDraws++;
         CardManager.Instance.DrawCard(false);
@@ -273,7 +288,7 @@ public class RivalAI
         // Check we haven't played a card yet, otherwise increment the counter
         if(lastActionIndex == 3) consecutiveActions++;
         else consecutiveActions = 0;
-        lastActionIndex = 3;
+        lastActionIndex = (int)AIAction.Play;
 
         if(_creature)
         {

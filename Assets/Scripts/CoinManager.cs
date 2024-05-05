@@ -63,21 +63,3 @@ public class CoinManager : MonoBehaviour
         }
     }
 }
-
-public class GameResultHandler : MonoBehaviour
-{
-    public bool _playerLost;
-    public bool _rivalLost;
-
-    public void HandleWinCondition()
-    {
-        if (_rivalLost)
-        {
-            CoinManager.instance.AddCoins(500); // Ganas 500 monedas si el rival pierde
-        }
-        else if (_playerLost)
-        {
-            CoinManager.instance.AddCoins(250); // Ganas 250 monedas si pierdes
-        }
-    }
-}
