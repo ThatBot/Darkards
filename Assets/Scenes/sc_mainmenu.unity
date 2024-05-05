@@ -1357,6 +1357,7 @@ MonoBehaviour:
   nameText: {fileID: 411563441}
   descriptionText: {fileID: 954779348}
   loreText: {fileID: 1355535936}
+  coinText: {fileID: 670292441}
 --- !u!1 &284739868
 GameObject:
   m_ObjectHideFlags: 0
@@ -1677,7 +1678,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 1814619746}
   m_HandleRect: {fileID: 1795566037}
   m_Direction: 0
-  m_MinValue: -80
+  m_MinValue: -10
   m_MaxValue: 20
   m_WholeNumbers: 0
   m_Value: 0
@@ -5418,7 +5419,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 2144113689}
   m_HandleRect: {fileID: 1492339549}
   m_Direction: 0
-  m_MinValue: -80
+  m_MinValue: -10
   m_MaxValue: 20
   m_WholeNumbers: 0
   m_Value: 0
@@ -6858,7 +6859,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 1176252513}
   m_HandleRect: {fileID: 731633818}
   m_Direction: 0
-  m_MinValue: -80
+  m_MinValue: -10
   m_MaxValue: 20
   m_WholeNumbers: 0
   m_Value: 0

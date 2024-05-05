@@ -98,7 +98,7 @@ public class DataManager : MonoBehaviour
 
     public void addCoins(int monedas)
     {
-        Debug.Log("Se han sumado: " + monedas);
         coins += monedas;
+        PlayerPrefs.SetFloat("coins", coins);
     }
 }

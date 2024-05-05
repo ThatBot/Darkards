@@ -218,7 +218,6 @@ public class CardManager : MonoBehaviour
             if(!coinsAdded) DataManager.Instance.addCoins(500);
             coinsAdded = true;
             victoryPanel.SetActive(true);
-            
         }
         else if(_playerLost)
         {
@@ -226,7 +225,6 @@ public class CardManager : MonoBehaviour
             if(!coinsAdded) DataManager.Instance.addCoins(250);
             coinsAdded = true;
             defeatPanel.SetActive(true);
-            
         }
     }
 

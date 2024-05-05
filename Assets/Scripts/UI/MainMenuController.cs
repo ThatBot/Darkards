@@ -23,6 +23,9 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private TMP_Text descriptionText;
     [SerializeField] private TMP_Text loreText;
 
+    [Header("Store")]
+    [SerializeField] private TMP_Text coinText;
+
     public void Start()
     {
         // Populate the sliders with the appropiate values
@@ -35,6 +38,8 @@ public class MainMenuController : MonoBehaviour
 
         mainMixer.GetFloat("effects_vol", out _vol);
         effectsSlider.value = _vol;
+
+        coinText.text = PlayerPrefs.GetFloat("coins").ToString();
     }
 
     public void OnPlayPressed()
