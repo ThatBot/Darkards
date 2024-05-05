@@ -104,6 +104,8 @@ public class CardManager : MonoBehaviour
 
     private void Start()
     {
+
+        audioSource = GetComponent<AudioSource>();
         startingPlayer = IntroController.Instance.InitiateIntro();
     }
 
@@ -949,6 +951,8 @@ public class CardManager : MonoBehaviour
 
     #region Tweens
 
+    private AudioSource audioSource;
+
     private IEnumerator AttackTween(GameObject _attacker, GameObject _defendant)
     {
         InAnimation = true;
@@ -958,7 +962,9 @@ public class CardManager : MonoBehaviour
         Sequence _attackSequence = DOTween.Sequence();
         _attackSequence.Append(_attacker.transform.DOLookAt(_defendant.transform.position, .2f));
         _attackSequence.Append(_attacker.transform.DOMove(_defendant.transform.position, .7f));
+        _attackSequence.AppendCallback(() => audioSource.Play());    // Lamda required
         _attackSequence.AppendCallback(()=>StartCoroutine(DamageTween(_defendant)));    // Lamda required
+       
         _attackSequence.Append(_attacker.transform.DOMove(_originalAttackerPos, .7f));
         _attackSequence.Append(_attacker.transform.DORotate(_originalAttackerRot, .2f));
 
