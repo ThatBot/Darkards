@@ -22,8 +22,12 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
-    private int coins = 100;
     private int colorblindnessType = 0;
+    private int coins = 0;
+    private int victorias = 0;
+    private int derrotas = 0;
+    private int partidas = 0;
+
     [SerializeField] private Slider master;
     [SerializeField] private Slider musica;
     [SerializeField] private Slider efectos;
@@ -31,11 +35,17 @@ public class DataManager : MonoBehaviour
     [SerializeField] private float defaultMasterVolume = 1f;
     [SerializeField] private float defaultMusicVolume = 1f;
     [SerializeField] private float defaultEffectsVolume = 1f;
+    [SerializeField] private int defaultVictorias = 0;
+    [SerializeField] private int defaultDerrotas = 0;
+    [SerializeField] private int defaultPartidas = 0;
+
+    // Start is called before the first frame update
 
     void Start()
     {
         DontDestroyOnLoad(gameObject);
         LoadSettings();
+        totalGames();
     }
     void LoadSettings()
     {
@@ -77,6 +87,40 @@ public class DataManager : MonoBehaviour
         {
             PlayerPrefs.SetFloat("Colorblindness", 3);
         }
+
+        if (PlayerPrefs.HasKey("Victorias"))
+        {
+            victorias = PlayerPrefs.GetInt("Victorias");
+        }
+        else
+        {
+            victorias = defaultVictorias;
+            PlayerPrefs.SetInt("Victorias", defaultVictorias);
+        }
+        if (PlayerPrefs.HasKey("Derrotas"))
+        {
+            derrotas = PlayerPrefs.GetInt("Derrotas");
+        }
+        else
+        {
+            derrotas = defaultDerrotas;
+            PlayerPrefs.SetInt("Derrotas", defaultDerrotas);
+        }
+        if (PlayerPrefs.HasKey("Partidas"))
+        {
+            partidas = PlayerPrefs.GetInt("Partidas");
+        }
+        else
+        {
+            partidas = defaultPartidas;
+            PlayerPrefs.SetInt("Partidas", defaultPartidas);
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 
     public void SetMasterVolume()
@@ -109,6 +153,24 @@ public class DataManager : MonoBehaviour
     public void addCoins(int monedas)
     {
         coins += monedas;
-        PlayerPrefs.SetFloat("coins", coins);
+        PlayerPrefs.SetInt("coins", coins);
+    }
+
+    public void addVictory(int victory)
+    {
+        victorias += victory;
+        PlayerPrefs.SetInt("Victorias", victorias);
+    }
+
+    public void addLost(int lost)
+    {
+        derrotas += lost;
+        PlayerPrefs.SetInt("Derrotas", derrotas);
+    }
+
+    public void totalGames()
+    {
+        partidas = victorias + derrotas;
+        PlayerPrefs.SetInt("PartidasTotales", partidas);
     }
 }

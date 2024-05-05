@@ -98,6 +98,8 @@ public class CardManager : MonoBehaviour
 
     private bool onIntro = true;
     private bool coinsAdded = false;
+    private bool victoryAdded = false;
+    private bool lostAdded = false;
     private int startingPlayer = 0;
 
     #endregion
@@ -196,6 +198,7 @@ public class CardManager : MonoBehaviour
 
         onIntro = false;
         coinsAdded = false;
+
         CameraController.Instance.OnIntro = false;
 
         if(startingPlayer == 1) SwitchTurn();
@@ -220,16 +223,25 @@ public class CardManager : MonoBehaviour
         if(_rivalLost)
         {
             PlayerPriority = true;
-            if(!coinsAdded) DataManager.Instance.addCoins(500);
+            if (!coinsAdded) { DataManager.Instance.addCoins(500);
+                if (!victoryAdded) DataManager.Instance.addVictory(1);
+            }
+
             coinsAdded = true;
+            
             victoryPanel.SetActive(true);
+            DataManager.Instance.totalGames();
         }
         else if(_playerLost)
         {
             PlayerPriority = true;
-            if(!coinsAdded) DataManager.Instance.addCoins(250);
-            coinsAdded = true;
+            if (!coinsAdded) { DataManager.Instance.addCoins(250);
+                if (!lostAdded) DataManager.Instance.addLost(1);
+            }
+            coinsAdded = true;   
+            lostAdded = true;
             defeatPanel.SetActive(true);
+            DataManager.Instance.totalGames();
         }
     }
 
