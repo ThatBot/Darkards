@@ -189,4 +189,28 @@ public class DataManager : MonoBehaviour
     {
         PlayerPrefs.SetInt("coins", coins);
     }
+
+    public bool TieneCarta(string nombreCarta)
+    {
+        // Supongamos que usamos PlayerPrefs para almacenar las cartas que tiene el jugador.
+        // Comprobamos si la carta está presente en PlayerPrefs.
+        return PlayerPrefs.HasKey(nombreCarta);
+    }
+
+    // Método para guardar las monedas actualizadas
+    public void GuardarMonedas()
+    {
+        // Supongamos que guardamos las monedas en PlayerPrefs con la clave "Coins".
+        PlayerPrefs.SetInt("Coins", coins);
+        PlayerPrefs.Save(); // Guardamos los cambios en PlayerPrefs.
+    }
+
+    // Método para añadir una carta a las propiedades del jugador
+    public void AñadirCarta(string nombreCarta)
+    {
+        // Supongamos que usamos PlayerPrefs para almacenar las cartas que tiene el jugador.
+        // Añadimos la carta a PlayerPrefs con la clave igual al nombre de la carta.
+        PlayerPrefs.SetInt(nombreCarta, 1); // Podríamos usar un valor diferente de 1 si es necesario.
+        PlayerPrefs.Save(); // Guardamos los cambios en PlayerPrefs.
+    }
 }

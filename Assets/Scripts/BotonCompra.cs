@@ -6,37 +6,41 @@ public class BotonCompra : MonoBehaviour
     public int costoDelObjeto = 1500;
     public DataManager dataManager;
     public TextMeshProUGUI textoBoton;
-    public GameObject objetoParaComprar; // Referencia al objeto que se comprará
+    public TextMeshProUGUI textoPropiedad;
+    public string propiedadTexto = "Propiedad";
+    public GameObject[] botones;
+    public GameObject botonSeleccionado;
 
     private void Start()
     {
         ActualizarEstadoBoton();
     }
 
-    private void Update()
-    {
-        ActualizarEstadoBoton();
-    }
     public void ComprarObjeto()
     {
         if (dataManager.coins >= costoDelObjeto)
         {
             // Realizar la compra
             dataManager.coins -= costoDelObjeto;
-            dataManager.SaveCoins(); // Guardar las monedas actualizadas
-            ActualizarEstadoBoton();
-            // Desactivar el botón
-            gameObject.SetActive(false);
-            // Desaparecer el objeto comprado (opcional)
-            if (objetoParaComprar != null)
+            dataManager.GuardarMonedas(); // Guardar las monedas actualizadas
+            // Marcar esta carta como en propiedad y seleccionada
+            if (!dataManager.TieneCarta(gameObject.name))
             {
-                objetoParaComprar.SetActive(false);
+                textoPropiedad.text = "Propiedad";
+                dataManager.AñadirCarta(gameObject.name);
             }
+            else
+            {
+                textoPropiedad.text = "";
+            }
+            botonSeleccionado = gameObject;
+            ActualizarBotonesSeleccionados();
         }
         else
         {
             Debug.Log("No tienes suficientes monedas para comprar este objeto.");
         }
+        ActualizarEstadoBoton(); // Llamar aquí para actualizar el color del precio del botón
     }
 
     private void ActualizarEstadoBoton()
@@ -48,6 +52,25 @@ public class BotonCompra : MonoBehaviour
         else
         {
             textoBoton.color = Color.red;
+        }
+    }
+
+    private void ActualizarBotonesSeleccionados()
+    {
+        foreach (GameObject boton in botones)
+        {
+            TextMeshProUGUI textoPropiedadBoton = boton.GetComponentInChildren<TextMeshProUGUI>();
+            if (textoPropiedadBoton != null)
+            {
+                if (boton == botonSeleccionado)
+                {
+                    textoPropiedadBoton.text = "Seleccionado";
+                }
+                else
+                {
+                    textoPropiedadBoton.text = dataManager.TieneCarta(boton.name) ? "Propiedad" : "";
+                }
+            }
         }
     }
 }
