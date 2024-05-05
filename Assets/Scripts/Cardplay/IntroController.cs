@@ -22,7 +22,7 @@ public class IntroController : MonoBehaviour
     [SerializeField] private Material coinTailsMaterial;
     [SerializeField] private GameObject structureSelector;
 
-    public void InitiateIntro()
+    public int InitiateIntro()
     {
         float _coinFlip = Random.Range(0, 100);
         if(_coinFlip >= 50) 
@@ -32,6 +32,8 @@ public class IntroController : MonoBehaviour
             _mats.Add(coinTailsMaterial);
             _mats.Add(coinHeadsMaterial);
             coinRenderer.SetMaterials(_mats);
+            coinAnimator.Play("Take 001");
+            return 0;
         }
         else
         {
@@ -40,8 +42,9 @@ public class IntroController : MonoBehaviour
             _mats.Add(coinHeadsMaterial);
             _mats.Add(coinTailsMaterial);
             coinRenderer.SetMaterials(_mats);
+            coinAnimator.Play("Take 001");
+            return 1;
         }
-        coinAnimator.Play("Take 001");
     }
 
     public void SelectStructure()
