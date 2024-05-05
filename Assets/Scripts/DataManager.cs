@@ -105,6 +105,7 @@ public class DataManager : MonoBehaviour
             partidas = defaultPartidas;
             PlayerPrefs.SetInt("Partidas", defaultPartidas);
         }
+    }
 
     // Update is called once per frame
     void Update()
