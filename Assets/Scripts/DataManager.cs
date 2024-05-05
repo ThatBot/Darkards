@@ -47,6 +47,7 @@ public class DataManager : MonoBehaviour
         LoadSettings();
         totalGames();
     }
+    
     void LoadSettings()
     {
         if (PlayerPrefs.HasKey("Master"))
