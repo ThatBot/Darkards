@@ -19,7 +19,8 @@ MonoBehaviour:
     y comerciantes que se han topado con estas criaturas, y muchos menos los que
     han sobrevivido."
   Sprite: {fileID: 21300000, guid: d25719dd9266cb04cba3e9b9d47b5bb2, type: 3}
-  Hologram: {fileID: 919132149155446097, guid: 61fa63f4045575144998267806501716, type: 3}
+  Hologram: {fileID: 4216380322030282186, guid: 069e6a86c0c402745a29981d90af5c9d,
+    type: 3}
   Type: 0
   Behaviour: {fileID: 0}
   Beneficial: 0
