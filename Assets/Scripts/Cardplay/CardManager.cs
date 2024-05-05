@@ -33,6 +33,8 @@ public class CardManager : MonoBehaviour
     public bool PlayerPriority = true;
     [SerializeField] private CardObject[] tokenCards;
     public bool InAnimation = false;
+    [SerializeField] private GameObject playerTurnIndicator;
+    [SerializeField] private GameObject rivalTurnIndicator;
 
     [Header("Player Data")]
     public DeckObject PlayerDeckObject;
@@ -120,7 +122,9 @@ public class CardManager : MonoBehaviour
         // Switch turns when actions run out
         if(ActionsLeft <= 0 || RivalActionsLeft <= 0) 
         {
-            SwitchTurn();
+            //SwitchTurn();
+            onIntro = true;
+            StartCoroutine(WaitForTurnSwitch(1.5f));
             return;
         }
         else if (RivalActionsLeft > 0 && !PlayerPriority && !isOnAction) 
@@ -243,6 +247,20 @@ public class CardManager : MonoBehaviour
             defeatPanel.SetActive(true);
             DataManager.Instance.totalGames();
         }
+    }
+
+    private IEnumerator WaitForTurnSwitch(float _seconds)
+    {
+        if(PlayerPriority) rivalTurnIndicator.SetActive(true);
+        else playerTurnIndicator.SetActive(true);
+
+        yield return new WaitForSeconds(_seconds);
+
+        rivalTurnIndicator.SetActive(false);
+        playerTurnIndicator.SetActive(false);
+
+        onIntro = false;
+        SwitchTurn();
     }
 
 /// <summary>
@@ -976,13 +994,13 @@ public class CardManager : MonoBehaviour
         _attackSequence.Append(_attacker.transform.DOMove(_defendant.transform.position, .7f));
         _attackSequence.AppendCallback(() => audioSource.Play());    // Lamda required
         _attackSequence.AppendCallback(()=>StartCoroutine(DamageTween(_defendant)));    // Lamda required
-       
-        _attackSequence.Append(_attacker.transform.DOMove(_originalAttackerPos, .7f));
-        _attackSequence.Append(_attacker.transform.DORotate(_originalAttackerRot, .2f));
+        _attackSequence.Append(_attacker.transform.DOLocalMove(Vector3.zero, .7f));
+        _attackSequence.Append(_attacker.transform.DOLocalRotate(Vector3.zero, .2f));
 
         _attackSequence.Play();
 
         yield return _attackSequence.WaitForCompletion();
+        
         isOnAction = false;
         InAnimation = false;
     }

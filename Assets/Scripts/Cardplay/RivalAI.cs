@@ -76,7 +76,8 @@ public class RivalAI
         Debug.Log("Current hand: [Creatures?: " + _hasCreatures + ", Spells?: " + _hasSpells + "]");
 
         // If there is a hole in the player's creature field, place a creature there to exploit it
-        if((!_playerFieldFull && _hasCreatures) && consecutiveActions < MAX_CONSECUTIVE_ACTIONS)
+        if((!_playerFieldFull && _hasCreatures) && CardManager.Instance.RivalCreatureLanes[_playerEmptyLane] == null
+            && (consecutiveActions < MAX_CONSECUTIVE_ACTIONS && lastActionIndex != (int)AIAction.Play))
         {
             Debug.Log("Casting a creature to counteract player");
             PlayAction(true, _playerEmptyLane);
@@ -101,10 +102,15 @@ public class RivalAI
         }
 
         // If we are more aggressive than defensive, attack
-        if((AggressionTokens > DefensiveTokens || !_hasSpells) && (consecutiveActions < MAX_CONSECUTIVE_ACTIONS && lastActionIndex != (int)AIAction.Attack) && _hasAttackers)
+        if((AggressionTokens > DefensiveTokens || !_hasSpells))
         {
             Debug.Log("Aggressive stance, attacking");
-            AttackAction();
+            if(_hasAttackers && (consecutiveActions < MAX_CONSECUTIVE_ACTIONS && lastActionIndex != (int)AIAction.Attack))
+            {
+                AttackAction();
+            }
+            else if(_hasCreatures && consecutiveDraws < MAX_CONSECUTIVE_DRAWS) PlayAction(true);
+            else if(!_hasCreatures && consecutiveDraws < MAX_CONSECUTIVE_DRAWS) DrawAction();
         }
         // If we are aggressive & defensive, assume a neutral position and draw
         else if(AggressionTokens == DefensiveTokens && CardManager.Instance.RivalDeck.Count <= 0 && consecutiveDraws < MAX_CONSECUTIVE_DRAWS)
