@@ -23,6 +23,7 @@ public class DataManager : MonoBehaviour
     #endregion
 
     private int coins = 100;
+    private int colorblindnessType = 0;
     [SerializeField] private Slider master;
     [SerializeField] private Slider musica;
     [SerializeField] private Slider efectos;
@@ -67,6 +68,15 @@ public class DataManager : MonoBehaviour
             efectos.value = defaultEffectsVolume;
             PlayerPrefs.SetFloat("Effects", defaultEffectsVolume);
         }  
+
+        if (PlayerPrefs.HasKey("Colorblindness"))
+        {
+            colorblindnessType = PlayerPrefs.GetInt("Colorblindness");
+        }
+        else
+        {
+            PlayerPrefs.SetFloat("Colorblindness", 3);
+        }
     }
 
     public void SetMasterVolume()
@@ -78,11 +88,18 @@ public class DataManager : MonoBehaviour
     {
         PlayerPrefs.SetFloat("Musica", musica.value);
     }
+    
     public void SetEffectsVolume()
     {
         PlayerPrefs.SetFloat("Efectos", efectos.value);
     }
     
+    public void SetColorblindnessType(int _type)
+    {
+        colorblindnessType = _type;
+        PlayerPrefs.SetInt("Colorblindness", colorblindnessType);
+    }
+
     public void ResetDefaultValues()
     {
         PlayerPrefs.DeleteAll();

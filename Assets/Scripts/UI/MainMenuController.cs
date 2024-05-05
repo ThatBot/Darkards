@@ -83,6 +83,7 @@ public class MainMenuController : MonoBehaviour
     public void SetColorblindnessType(int _type)
     {
         colorblindnessMat.SetFloat("_Type", _type);
+        DataManager.Instance.SetColorblindnessType(_type);
     }
 
     public void SetCardLore(CardObject _card)
