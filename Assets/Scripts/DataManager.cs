@@ -106,17 +106,6 @@ public class DataManager : MonoBehaviour
             PlayerPrefs.SetInt("Partidas", defaultPartidas);
         }
 
-        if (PlayerPrefs.HasKey("coins"))
-        {
-            coins = PlayerPrefs.GetInt("coins");
-        }
-        else
-        {
-            coins = 0;
-            PlayerPrefs.SetInt("coins", 0);
-        }
-    }
-
     // Update is called once per frame
     void Update()
     {

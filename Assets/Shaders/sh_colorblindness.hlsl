@@ -3,6 +3,12 @@
 
 void ColorblindnessFilter_float(int Type, float Intensity, float4 ColorIn, out float3 OutColor)
 {
+	if(Type == 3) 
+	{
+		OutColor = ColorIn;
+		return;
+	}
+
 	float L = (17.8824 * ColorIn.r) + (43.5161 * ColorIn.g) + (4.11935 * ColorIn.b);
 	float M = (3.45565 * ColorIn.r) + (27.1554 * ColorIn.g) + (3.86714 * ColorIn.b);
 	float S = (0.0299566 * ColorIn.r) + (0.184309 * ColorIn.g) + (1.46709 * ColorIn.b);
