@@ -9,13 +9,11 @@ public class BotonCompra : MonoBehaviour
     public TextMeshProUGUI textoPropiedad;
     public GameObject[] botones;
     public GameObject botonSeleccionado;
-    private bool elegido = false;
+    public bool comprado = false;
 
     private void Start()
     {
         ActualizarBotones();
-        textoPrecio.gameObject.SetActive(true);
-        textoPropiedad.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -25,18 +23,24 @@ public class BotonCompra : MonoBehaviour
 
     public void ComprarObjeto()
     {
-        if (dataManager.coins >= costoDelObjeto)
+        if (comprado)
+        {
+            
+        }else if (dataManager.coins >= costoDelObjeto)
         {
             // Realizar la compra
             dataManager.coins -= costoDelObjeto;
             dataManager.GuardarMonedas(); // Guardar las monedas actualizadas
-
-            // Marcar esta carta como en propiedad
-            textoPrecio.text = "";
-            textoPropiedad.text = "En propiedad";
-            dataManager.AñadirCarta(gameObject.name);
-
-            // Actualizar los botones seleccionados
+            // Marcar esta carta como en propiedad y seleccionada
+            if (!dataManager.TieneCarta(gameObject.name))
+            {
+                textoPropiedad.text = "Propiedad";
+                dataManager.AñadirCarta(gameObject.name);
+            }
+            else
+            {
+                textoPropiedad.text = "";
+            }
             botonSeleccionado = gameObject;
             ActualizarBotones();
         }
@@ -44,51 +48,32 @@ public class BotonCompra : MonoBehaviour
         {
             Debug.Log("No tienes suficientes monedas para comprar este objeto.");
         }
-    }
+        
 
-    public void SeleccionarBoton()
-    {
-        // Cambiar el estado de los botones
-        foreach (GameObject boton in botones)
-        {
-            if (boton == gameObject)
-            {
-                boton.GetComponentInChildren<TextMeshProUGUI>().text = "Seleccionado";
-            }
-            else
-            {
-                boton.GetComponentInChildren<TextMeshProUGUI>().text = "En propiedad";
-                BotonCompra botonCompra = boton.GetComponent<BotonCompra>();
-                if (botonCompra != null)
-                {
-                    botonCompra.ActualizarPropiedad(); // Actualizar el estado "En propiedad"
-                }
-            }
-        }
-
-        // Actualizar el botón seleccionado
-        botonSeleccionado = gameObject;
     }
 
     private void ActualizarBotones()
     {
         foreach (GameObject boton in botones)
         {
-            if (boton != botonSeleccionado)
+            TextMeshProUGUI textoPrecioBoton = boton.GetComponentInChildren<TextMeshProUGUI>();
+            if (textoPrecioBoton != null)
             {
-                BotonCompra botonCompra = boton.GetComponent<BotonCompra>();
-                if (botonCompra != null)
+                if (boton == botonSeleccionado)
                 {
-                    botonCompra.ActualizarPropiedad(); // Actualizar el estado "En propiedad"
+                    textoPrecioBoton.color = Color.green;
+                    textoPrecioBoton.text = ""; // Ocultar el precio del botón seleccionado
+                }
+                else
+                {
+                    BotonCompra botonCompra = boton.GetComponent<BotonCompra>(); // Obtener el script BotonCompra del botón
+                    if (botonCompra != null)
+                    {
+                        textoPrecioBoton.color = (dataManager.coins >= botonCompra.costoDelObjeto) ? Color.green : Color.red; // Actualizar el color del precio
+                        textoPrecioBoton.text = botonCompra.costoDelObjeto.ToString(); // Mostrar el precio del botón no seleccionado
+                    }
                 }
             }
         }
-    }
-
-    private void ActualizarPropiedad()
-    {
-        // Actualizar el estado "En propiedad"
-        textoPrecio.text = (botonSeleccionado == gameObject) ? costoDelObjeto.ToString() : "";
-        textoPropiedad.text = dataManager.TieneCarta(gameObject.name) ? "En propiedad" : "";
     }
 }
