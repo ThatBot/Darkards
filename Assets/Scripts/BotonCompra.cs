@@ -5,15 +5,22 @@ public class BotonCompra : MonoBehaviour
 {
     public int costoDelObjeto = 1500;
     public DataManager dataManager;
-    public TextMeshProUGUI textoBoton;
+    public TextMeshProUGUI textoPrecio;
     public TextMeshProUGUI textoPropiedad;
-    public string propiedadTexto = "Propiedad";
     public GameObject[] botones;
     public GameObject botonSeleccionado;
+    private bool elegido = false;
 
     private void Start()
     {
-        ActualizarEstadoBoton();
+        ActualizarBotones();
+        textoPrecio.gameObject.SetActive(true);
+        textoPropiedad.gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        ActualizarBotones();
     }
 
     public void ComprarObjeto()
@@ -23,57 +30,65 @@ public class BotonCompra : MonoBehaviour
             // Realizar la compra
             dataManager.coins -= costoDelObjeto;
             dataManager.GuardarMonedas(); // Guardar las monedas actualizadas
-            // Marcar esta carta como en propiedad y seleccionada
-            if (!dataManager.TieneCarta(gameObject.name))
-            {
-                textoPropiedad.text = "Propiedad";
-                dataManager.AñadirCarta(gameObject.name);
-            }
-            else
-            {
-                textoPropiedad.text = "";
-            }
+
+            // Marcar esta carta como en propiedad
+            textoPrecio.text = "";
+            textoPropiedad.text = "En propiedad";
+            dataManager.AñadirCarta(gameObject.name);
+
+            // Actualizar los botones seleccionados
             botonSeleccionado = gameObject;
-            ActualizarBotonesSeleccionados();
+            ActualizarBotones();
         }
         else
         {
             Debug.Log("No tienes suficientes monedas para comprar este objeto.");
         }
-        ActualizarEstadoBoton(); // Llamar aquí para actualizar el color del precio del botón
     }
 
-    private void ActualizarEstadoBoton()
+    public void SeleccionarBoton()
     {
-        if (dataManager.coins >= costoDelObjeto)
-        {
-            textoBoton.color = Color.green;
-        }
-        else
-        {
-            textoBoton.color = Color.red;
-        }
-        // Actualizar el texto del botón con el precio
-        textoBoton.text = costoDelObjeto.ToString();
-    }
-
-
-    private void ActualizarBotonesSeleccionados()
-    {
+        // Cambiar el estado de los botones
         foreach (GameObject boton in botones)
         {
-            TextMeshProUGUI textoPropiedadBoton = boton.GetComponentInChildren<TextMeshProUGUI>();
-            if (textoPropiedadBoton != null)
+            if (boton == gameObject)
             {
-                if (boton == botonSeleccionado)
+                boton.GetComponentInChildren<TextMeshProUGUI>().text = "Seleccionado";
+            }
+            else
+            {
+                boton.GetComponentInChildren<TextMeshProUGUI>().text = "En propiedad";
+                BotonCompra botonCompra = boton.GetComponent<BotonCompra>();
+                if (botonCompra != null)
                 {
-                    textoPropiedadBoton.text = "Seleccionado";
-                }
-                else
-                {
-                    textoPropiedadBoton.text = dataManager.TieneCarta(boton.name) ? "Propiedad" : "";
+                    botonCompra.ActualizarPropiedad(); // Actualizar el estado "En propiedad"
                 }
             }
         }
+
+        // Actualizar el botón seleccionado
+        botonSeleccionado = gameObject;
+    }
+
+    private void ActualizarBotones()
+    {
+        foreach (GameObject boton in botones)
+        {
+            if (boton != botonSeleccionado)
+            {
+                BotonCompra botonCompra = boton.GetComponent<BotonCompra>();
+                if (botonCompra != null)
+                {
+                    botonCompra.ActualizarPropiedad(); // Actualizar el estado "En propiedad"
+                }
+            }
+        }
+    }
+
+    private void ActualizarPropiedad()
+    {
+        // Actualizar el estado "En propiedad"
+        textoPrecio.text = (botonSeleccionado == gameObject) ? costoDelObjeto.ToString() : "";
+        textoPropiedad.text = dataManager.TieneCarta(gameObject.name) ? "En propiedad" : "";
     }
 }
