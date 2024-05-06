@@ -117,16 +117,7 @@ public class DataManager : MonoBehaviour
             partidas = defaultPartidas;
             PlayerPrefs.SetInt("Partidas", defaultPartidas);
         }
-        if (PlayerPrefs.HasKey("coins"))
-        {
-            coins = PlayerPrefs.GetInt("coins");
-        }
-        else
-        {
-            coins = 0;
-            PlayerPrefs.SetInt("coins", 0);
-        }
-
+            coins = PlayerPrefs.GetInt("coins",0);
     }
 
     // Update is called once per frame
@@ -194,15 +185,7 @@ public class DataManager : MonoBehaviour
     {
         // Supongamos que usamos PlayerPrefs para almacenar las cartas que tiene el jugador.
         // Comprobamos si la carta está presente en PlayerPrefs.
-        return PlayerPrefs.HasKey(nombreCarta);
-    }
-
-    // Método para guardar las monedas actualizadas
-    public void GuardarMonedas()
-    {
-        // Supongamos que guardamos las monedas en PlayerPrefs con la clave "Coins".
-        PlayerPrefs.SetInt("Coins", coins);
-        PlayerPrefs.Save(); // Guardamos los cambios en PlayerPrefs.
+        return PlayerPrefs.HasKey("Carta." + nombreCarta);
     }
 
     // Método para añadir una carta a las propiedades del jugador
@@ -210,7 +193,7 @@ public class DataManager : MonoBehaviour
     {
         // Supongamos que usamos PlayerPrefs para almacenar las cartas que tiene el jugador.
         // Añadimos la carta a PlayerPrefs con la clave igual al nombre de la carta.
-        PlayerPrefs.SetInt(nombreCarta, 1); // Podríamos usar un valor diferente de 1 si es necesario.
+        PlayerPrefs.SetInt("Carta." + nombreCarta, 1); // Podríamos usar un valor diferente de 1 si es necesario.
         PlayerPrefs.Save(); // Guardamos los cambios en PlayerPrefs.
     }
 }

@@ -5,20 +5,14 @@ using TMPro;
 
 public class TextoMonedas : MonoBehaviour
 {
-    public DataManager dataManager;
     public TextMeshProUGUI textoMonedas;
 
     void Update()
     {
-        // Verificar si el DataManager está asignado
-        if (dataManager != null)
+        if (!DataManager.Instance)
         {
-            // Actualizar el texto con la cantidad de monedas del DataManager
-            textoMonedas.text =  dataManager.coins.ToString();
-        }
-        else
-        {
-            Debug.LogWarning("El DataManager no está asignado en el ActualizadorTextoMonedas.");
-        }
+            return;
+        }    
+        textoMonedas.text =  DataManager.Instance.coins.ToString();
     }
 }
