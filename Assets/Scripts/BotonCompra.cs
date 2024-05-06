@@ -53,7 +53,10 @@ public class BotonCompra : MonoBehaviour
         {
             textoBoton.color = Color.red;
         }
+        // Actualizar el texto del botón con el precio
+        textoBoton.text = costoDelObjeto.ToString();
     }
+
 
     private void ActualizarBotonesSeleccionados()
     {
