@@ -102,11 +102,12 @@ public class RivalAI
         }
 
         // If we are more aggressive than defensive, attack
-        if((AggressionTokens > DefensiveTokens || !_hasSpells))
+        if(AggressionTokens > DefensiveTokens || !_hasSpells)
         {
-            Debug.Log("Aggressive stance, attacking");
-            if(_hasAttackers && (consecutiveActions < MAX_CONSECUTIVE_ACTIONS && lastActionIndex != (int)AIAction.Attack))
+            Debug.Log("Aggressive stance");
+            if(_hasAttackers && consecutiveActions < MAX_CONSECUTIVE_ACTIONS && lastActionIndex != (int)AIAction.Attack)
             {
+                Debug.Log("Attacking");
                 AttackAction();
             }
             else if(_hasCreatures && consecutiveDraws < MAX_CONSECUTIVE_DRAWS) PlayAction(true);
@@ -119,7 +120,7 @@ public class RivalAI
             DrawAction();
         }
         // If we are more defensive than aggressive, cast spells
-        else if(_hasSpells && (consecutiveActions < MAX_CONSECUTIVE_ACTIONS && lastActionIndex != (int)AIAction.Play))
+        else if(_hasSpells && consecutiveActions < MAX_CONSECUTIVE_ACTIONS && lastActionIndex != (int)AIAction.Play)
         {
             Debug.Log("Defensive stance, casting");
             PlayAction(false);

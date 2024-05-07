@@ -502,6 +502,9 @@ public class CardManager : MonoBehaviour
             if(GetCardAt(_defendantLane, 1) != null) return false;
         }
 
+        // Prevent attacks from structures
+        if(_attackerRow == 0 || _attackerRow == 3) return false;
+
         CardObject _attacker = GetCardAt(_attackerLane, _attackerRow);
         CardObject _defendant = GetCardAt(_defendantLane, _defendantRow);
 
@@ -995,7 +998,7 @@ public class CardManager : MonoBehaviour
         _attackSequence.AppendCallback(() => audioSource.Play());    // Lamda required
         _attackSequence.AppendCallback(()=>StartCoroutine(DamageTween(_defendant)));    // Lamda required
         _attackSequence.Append(_attacker.transform.DOLocalMove(Vector3.zero, .7f));
-        _attackSequence.Append(_attacker.transform.DOLocalRotate(Vector3.zero, .2f));
+        _attackSequence.Append(_attacker.transform.DORotate(_originalAttackerRot, .2f));
 
         _attackSequence.Play();
 
